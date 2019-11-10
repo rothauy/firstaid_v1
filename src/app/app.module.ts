@@ -8,10 +8,17 @@ import { WoundListComponent } from './wound/wound-list/wound-list.component';
 import { WoundItemComponent } from './wound/wound-list/wound-item/wound-item.component';
 import { WoundDetailComponent } from './wound/wound-detail/wound-detail.component';
 import { ImageUploadedComponent } from './image-uploaded/image-uploaded.component';
-import { UserHistoryComponent } from './user-history/user-history.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { LoginComponent } from './authentication/login/login.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  MatInputModule,
+  MatCardModule,
+  MatButtonModule,
+  MatToolbarModule,
+  MatExpansionModule
+} from "@angular/material";
+import { DropdownDirective } from './shared/dropdown.directive';
 
 @NgModule({
   declarations: [
@@ -22,12 +29,19 @@ import { LoginComponent } from './authentication/login/login.component';
     WoundItemComponent,
     WoundDetailComponent,
     ImageUploadedComponent,
-    UserHistoryComponent,
     SignupComponent,
     LoginComponent,
+    DropdownDirective
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatCardModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatExpansionModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

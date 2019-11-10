@@ -1,1 +1,16 @@
-<p>wound-item works!</p>
+<a
+    class="list-group-item clearfix"
+    (click)="onSelected()">
+    <div class="pull-left">
+        <h4 class="list-group-item-heading">{{ wound.type }}</h4>
+        <p class="list-group-item-text">{{ wound.description }}</p>
+    </div>
+    <span class="pull-right">
+        <img 
+            [src]="wound.imagePath" 
+            alt="{{ wound.type }}" 
+            class="img-responsive"
+            style="max-height: 50px;">
+    </span>
+
+</a>
