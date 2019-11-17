@@ -6,6 +6,9 @@
 <div class="row">
     <div class="col-xs-12">
         <h1>Type of Wound</h1>
-        <app-wound-item></app-wound-item>
+        <app-wound-item
+        *ngFor="let woundEl of wounds"
+        [wound]="woundEl"
+        (woundSelected)="onWoundSelected(woundEl)"></app-wound-item>
     </div>
 </div>
