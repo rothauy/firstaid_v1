@@ -1,0 +1,33 @@
+<mat-toolbar>
+    <span>New Wound</span>
+    <span class="spacer"></span>
+    <button class="btn-dialog-close" mat-stroked-button (click)="onClose()"><mat-icon>clear</mat-icon></button>
+</mat-toolbar>
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<form [formGroup]="form" (submit)="onSaveWound" *ngIf="!isLoading">
+    <mat-grid-list cols="2" rowHeight="300px">
+        <mat-grid-tile>
+            <div class="controles-container">
+                <mat-form-field>   
+                    <input matInput type="text" formControlName="type" placeholder="Wound Type">
+                    <mat-error *ngIf="form.get('type').invalid">Please enter a valid type.</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <textarea matInput rows="4" formControlName="description" placeholder="Wound Description"></textarea>
+                    <mat-error *ngIf="form.get('description').invalid">Please enter a valid description.</mat-error>
+                </mat-form-field>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <div class="controles-container">
+                <div>
+                    <button mat-stroked-button type="button" (click)="imagePicker.click()">Pick an image</button>
+                    <input type="file" #imagePicker (change)="onImagePicked($event)">
+                </div>
+                <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+                    <img [src]="imagePreview" [alt]="form.value.type">
+                </div>
+            </div>
+        </mat-grid-tile> 
+    </mat-grid-list>
+</form>

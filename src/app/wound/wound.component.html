@@ -1,8 +1,17 @@
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-5">
-        <app-wound-list></app-wound-list>
+        <app-wound-list
+            (woundWasSelected)="selectedWound = $event"></app-wound-list>
     </div>
     <div class="col-md-7">
-        <app-wound-detail></app-wound-detail>
+        <app-wound-detail
+            *ngIf="selectedWound; else infoText"
+            [wound]="selectedWound"></app-wound-detail>
+            <ng-template #infoText>
+                <p>Please select a wound</p>
+            </ng-template>
     </div>
+</div> -->
+<div class="row col-md-12">
+    <app-wound-create></app-wound-create>
 </div>

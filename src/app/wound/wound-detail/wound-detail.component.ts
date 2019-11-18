@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Wound } from '../wound.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-wound-detail',
@@ -6,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./wound-detail.component.css']
 })
 export class WoundDetailComponent implements OnInit {
-
+  @Input() wound: Wound;
+  private authStatusSub: Subscription;
+  userIsAuthenticated = false;
+  
   constructor() { }
 
   ngOnInit() {

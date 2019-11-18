@@ -3,14 +3,15 @@ import { Wound } from './wound.model';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-
+import { stringify } from 'querystring';
+import { Router } from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class WoundService {
     private wounds: Wound[] = [];
     private woundsUpdated = new Subject<Wound[]>();
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private router: Router) {}
 
     getWounds(){
         this.http
@@ -36,19 +37,63 @@ export class WoundService {
         return this.woundsUpdated.asObservable();
     }
 
-    getWound(type: string){
-        return {...this.wounds.find(p => p.type = type)};
+    getWound(id: string){
+        return this.http.get<{_id: string, type: string, description: string, imagePath: string}>(
+            "http://localhost:3000/api/wounds/" + id
+        );
     }
 
-    addWound(type: string, desc: string, imagePath: string) {
-        const wound: Wound = {id: null, type: type, description: desc, imagePath: imagePath};
+    addWound(type: string, desc: string, imagePath: File) {
+        const woundData = new FormData();
+        woundData.append("type", type);
+        woundData.append("description", desc);
+        woundData.append("imagePath", imagePath, type);
         this.http
-            .post<{message: string, woundId: string}>("http://localhost:3000/api/wounds", wound)
+            .post<{message: string, wound: Wound}>("http://localhost:3000/api/wounds", woundData)
             .subscribe(responseData => {
-                const id = responseData.woundId;
-                wound.id = id;
+                const wound: Wound = {
+                    id: responseData.wound.id,
+                    type: type,
+                    description: desc,
+                    imagePath: responseData.wound.imagePath
+                };
                 this.wounds.push(wound);
                 this.woundsUpdated.next([...this.wounds]);
+                this.router.navigate(["/"]);
+            });
+    }
+
+    updateWound(id: string, type: string, description: string, image: File | string) {
+        let woundData: Wound | FormData;
+        if (typeof image === "object") {
+            woundData = new FormData();
+            woundData.append("id", id);
+            woundData.append("type", type);
+            woundData.append("description", description);
+            woundData.append("image", image, type);
+        } else {
+            woundData = {
+                id: id, 
+                type: type,
+                description: description,
+                imagePath: image
+            };
+        }
+        this.http
+            .put("http://localhost:3000/api/wounds/" + id, woundData)
+            .subscribe( response => {
+                const updatedWounds = [...this.wounds];
+                const oldWoundIndex = updatedWounds.findIndex(p => p.id === id);
+                const wound: Wound = {
+                    id: id,
+                    type: type, 
+                    description: description,
+                    imagePath: ""
+                };
+                updatedWounds[oldWoundIndex] = wound;
+                this.wounds = updatedWounds;
+                this.woundsUpdated.next([...this.wounds]);
+                this.router.navigate(["/"]);
             });
     }
 

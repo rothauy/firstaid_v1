@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Wound } from './wound.model';
 
 @Component({
   selector: 'app-wound',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./wound.component.css']
 })
 export class WoundComponent implements OnInit {
+  selectedWound: Wound;
 
   constructor() { }
 
