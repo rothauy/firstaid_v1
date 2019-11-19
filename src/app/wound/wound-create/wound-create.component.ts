@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { WoundService } from '../wound.service';
 import { mimeType } from 'src/app/shared/mime-type.validator';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-wound-create',
@@ -24,7 +25,8 @@ export class WoundCreateComponent implements OnInit {
 
   constructor(
     public woundsService: WoundService,
-    public route: ActivatedRoute) {}
+    public route: ActivatedRoute, 
+    public dialogRef: MatDialogRef<WoundCreateComponent>) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -66,6 +68,7 @@ export class WoundCreateComponent implements OnInit {
   }
 
   onClose() {
+    this.dialogRef.close();
   }
 
   onSaveWound() {
@@ -77,14 +80,14 @@ export class WoundCreateComponent implements OnInit {
       this.woundsService.addWound(
         this.form.value.type,
         this.form.value.description,
-        this.form.value.imagePath
+        this.form.value.image
       );
     } else {
     };
     this.form.reset;
   }
 
-  onImagePicked() {
+  onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({ image: file });
     this.form.get("image").updateValueAndValidity();
@@ -94,4 +97,5 @@ export class WoundCreateComponent implements OnInit {
     };
     reader.readAsDataURL(file);
   }
+
 }

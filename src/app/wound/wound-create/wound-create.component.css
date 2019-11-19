@@ -22,5 +22,10 @@ image-preview {
 }
 
 .image-preview img {
-    height: 100%;
+    height: 100px;
+    width: auto;
+}
+
+.button-space {
+    margin-left: 5px;
 }

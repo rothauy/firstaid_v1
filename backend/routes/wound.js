@@ -19,7 +19,8 @@ const storage = multer.diskStorage({
         if (isValid) {
             error = null;
         }
-        cb(error, "bankend/images");
+        cb(error, "backend/images");
+        
     },
     filename: (req, file, cb) => {
         const name = file.originalname
@@ -33,19 +34,23 @@ const storage = multer.diskStorage({
 
 router.post(
     "", 
-    multer({ storage: storage }).single("image"),
+    multer({ storage }).single("image"),
     (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
+    
     const wound = new Wound({
         type: req.body.type,
         description: req.body.description,
-        imagePath: url + "/image/" + req.file.filename,
-        creator: req.userData.userId
-    })
+        imagePath: url + "/images/" + req.file.filename,
+        // creator: req.userData.userId
+    })    
     wound.save().then(createdWound => {
         res.status(201).json({
             message: "A new wound type is added successfully",
-            woundId: createdWound._id
+            wound: {
+                ...createdWound,
+                id: createdWound._id,
+            }
         });
     });
 });
@@ -96,7 +101,7 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.delete("/:id", (req, res, next) => {
-    Wound.deleteOne({_id: req.params.id, creator: req.userData.userId})
+    Wound.deleteOne({_id: req.params.id})
         .then( result => {
             console.log(result);
             res.status(200).json({ 
@@ -106,3 +111,5 @@ router.delete("/:id", (req, res, next) => {
 });
 
 module.exports = router;
+
+// Wound.deleteOne({_id: req.params.id, creator: req.userData.userId})

@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
 import { Wound } from '../wound.model';
 import { Subscription } from 'rxjs';
 import { WoundService } from '../wound.service';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { WoundCreateComponent } from '../wound-create/wound-create.component';
 
 @Component({
   selector: 'app-wound-list',
@@ -14,7 +16,7 @@ export class WoundListComponent implements OnInit, OnDestroy {
   wounds: Wound[] = []
   private woundsSub: Subscription;
 
-  constructor(public woundsService: WoundService) { }
+  constructor(public woundsService: WoundService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.woundsService.getWounds();
@@ -26,6 +28,14 @@ export class WoundListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.woundsSub.unsubscribe();
+  }
+
+  onCreate() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "60%";
+    this.dialog.open(WoundCreateComponent,dialogConfig);
   }
 
   onWoundSelected(wound: Wound){

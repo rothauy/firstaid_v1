@@ -23,7 +23,7 @@ export class WoundService {
                         description: wound.description,
                         imagePath: wound.imagePath,
                         id: wound._id,
-                        creator: wound.creator
+                        // creator: wound.creator
                     };
                 });
             }))
@@ -43,23 +43,22 @@ export class WoundService {
         );
     }
 
-    addWound(type: string, desc: string, imagePath: File) {
+    addWound(type: string, description: string, image: File) {
         const woundData = new FormData();
         woundData.append("type", type);
-        woundData.append("description", desc);
-        woundData.append("imagePath", imagePath, type);
+        woundData.append("description", description);
+        woundData.append("image", image, type);
         this.http
             .post<{message: string, wound: Wound}>("http://localhost:3000/api/wounds", woundData)
             .subscribe(responseData => {
                 const wound: Wound = {
                     id: responseData.wound.id,
                     type: type,
-                    description: desc,
+                    description: description,
                     imagePath: responseData.wound.imagePath
                 };
                 this.wounds.push(wound);
                 this.woundsUpdated.next([...this.wounds]);
-                this.router.navigate(["/"]);
             });
     }
 
