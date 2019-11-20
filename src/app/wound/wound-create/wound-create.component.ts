@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Wound } from '../wound.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { WoundService } from '../wound.service';
 import { mimeType } from 'src/app/shared/mime-type.validator';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-wound-create',
@@ -12,8 +11,6 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ['./wound-create.component.css']
 })
 export class WoundCreateComponent implements OnInit {
-  enteredType = "";
-  enteredDesc = "";
   imagePreview: string;
 
   wound: Wound;
@@ -22,11 +19,12 @@ export class WoundCreateComponent implements OnInit {
   form: FormGroup;
   private mode = "create";
   private woundId: string;
+  
 
   constructor(
     public woundsService: WoundService,
-    public route: ActivatedRoute, 
-    public dialogRef: MatDialogRef<WoundCreateComponent>) {}
+    public dialogRef: MatDialogRef<WoundCreateComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Wound) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -41,30 +39,19 @@ export class WoundCreateComponent implements OnInit {
         asyncValidators: [mimeType]
       })
     });
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      if (paramMap.has("woundId")) {
-        this.mode = "edit";
-        this.woundId = paramMap.get("woundId");
-        this.isLoading = true;
-        this.woundsService.getWound(this.woundId).subscribe(woundData => {
-          this.isLoading = false;
-          this.wound = {
-            id: woundData._id,
-            type: woundData.type,
-            description: woundData.description,
-            imagePath: woundData.imagePath
-          },
-          this.form.setValue({
-            type: this.wound.type,
-            description: this.wound.description,
-            imagePath: this.wound.imagePath
-          });
-        });
-      } else {
-        this.mode = "create";
-        this.woundId = null;
-      }
-    })
+    if (this.data !== null){
+      this.mode = "edit";
+      this.woundId = this.data.id;
+      this.imagePreview = this.data.imagePath;
+      this.form.setValue({
+        type: this.data.type,
+        description: this.data.description,
+        image: this.data.imagePath
+      });
+    } else {
+      this.mode = "create";
+      this.woundId = null;
+    }
   }
 
   onClose() {
@@ -83,8 +70,15 @@ export class WoundCreateComponent implements OnInit {
         this.form.value.image
       );
     } else {
+      this.woundsService.updateWound(
+        this.woundId,
+        this.form.value.type,
+        this.form.value.description,
+        this.form.value.image
+      )
     };
     this.form.reset;
+    this.dialogRef.close();
   }
 
   onImagePicked(event: Event) {

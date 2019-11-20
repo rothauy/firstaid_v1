@@ -79,25 +79,24 @@ export class WoundService {
             };
         }
         this.http
-            .put("http://localhost:3000/api/wounds/" + id, woundData)
-            .subscribe( response => {
+            .put<{message: string, wound: Wound}>("http://localhost:3000/api/wounds/" + id, woundData)
+            .subscribe( responseData => {
                 const updatedWounds = [...this.wounds];
                 const oldWoundIndex = updatedWounds.findIndex(p => p.id === id);
                 const wound: Wound = {
                     id: id,
                     type: type, 
                     description: description,
-                    imagePath: ""
+                    imagePath: responseData.wound.imagePath
                 };
                 updatedWounds[oldWoundIndex] = wound;
                 this.wounds = updatedWounds;
                 this.woundsUpdated.next([...this.wounds]);
-                this.router.navigate(["/"]);
             });
     }
 
     deleteWound(id: string) {
-        this.http.delete("http://localhost:3000/api/wounds" + id)
+        this.http.delete("http://localhost:3000/api/wounds/" + id)
             .subscribe(() => {
                 const updatedWounds = this.wounds.filter(wound => wound.id !== id);
                 this.wounds = updatedWounds;

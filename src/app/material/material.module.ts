@@ -14,6 +14,7 @@ import * as Material from '@angular/material';
         Material.MatGridListModule,
         Material.MatFormFieldModule,
         Material.MatProgressSpinnerModule,
+        Material.MatDialogModule
     ],
 
     exports: [
@@ -26,6 +27,7 @@ import * as Material from '@angular/material';
         Material.MatGridListModule,
         Material.MatFormFieldModule,
         Material.MatProgressSpinnerModule,
+        Material.MatDialogModule
     ],
 
     declarations: []

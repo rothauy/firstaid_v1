@@ -45,11 +45,14 @@ router.post(
         // creator: req.userData.userId
     })    
     wound.save().then(createdWound => {
+        console.log(createdWound);
         res.status(201).json({
             message: "A new wound type is added successfully",
             wound: {
-                ...createdWound,
                 id: createdWound._id,
+                type: createdWound.type,
+                description: createdWound.description,
+                imagePath: createdWound.imagePath
             }
         });
     });
@@ -62,7 +65,7 @@ router.put(
         let imagePath = req.body.imagePath;
         if (req.file) {
             const url = req.protocol + "://" + req.get("host");
-            imagePath = url + "/image/" + req.file.filename;
+            imagePath = url + "/images/" + req.file.filename;
         }
         const wound = new Wound({
             _id: req.body.id,
@@ -70,11 +73,13 @@ router.put(
             description: req.body.description,
             imagePath: imagePath,
         });
-        Wound.updateOne({_id: req.params.id }, wound).then(result => {
-            res.status(200).json({ message: "Successfully update a wound in backend/route/wound.js"});
+        Wound.updateOne({_id: req.params.id }, wound).then(updatedWound => {
+            res.status(200).json({ 
+                message: "Successfully update a wound in backend/route/wound.js",
+                wound: wound
+            });
         });
-    }
-);
+});
 
 router.get("", (req, res, next) => {
     Wound.find()
@@ -100,7 +105,9 @@ router.get("/:id", (req, res, next) => {
     });
 });
 
-router.delete("/:id", (req, res, next) => {
+router.delete(
+    "/:id", 
+    (req, res, next) => {
     Wound.deleteOne({_id: req.params.id})
         .then( result => {
             console.log(result);

@@ -18,7 +18,7 @@ import { HttpClientModule} from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app.routing.module';
-import { MatDialogModule, MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,6 @@ import { MatDialogModule, MatDialogRef } from '@angular/material';
     HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    MatDialogModule
   ],
   providers: [
     {
@@ -49,6 +48,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material';
       useValue: {}
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [WoundCreateComponent]
 })
 export class AppModule { }
