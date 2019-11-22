@@ -3,26 +3,53 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const UserData = require('../models/userData');
 
 const router = express.Router();
 
 router.post("/signup", (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
+    const authData = req.body.authData;
+    bcrypt.hash(authData.password, 10)
         .then( hash => {
+            const reqAuthData = req.body.authData;
             const user = new User ({
-                email: req.body.email,
+                email: reqAuthData.email,
                 password: hash
             });
             user.save()
                 .then( result => {
-                    res.status(201).json({
-                        message: "User was created!",
-                        result: result
-                    });
+                    const reqUserData = req.body.userData;
+                    const userData = new UserData ({ 
+                        firstName: reqUserData.firstName,
+                        lastName: reqUserData.lastName,
+                        phoneNumber: reqUserData.phoneNumber,
+                        address: reqUserData.address,
+                        city: reqUserData.city,
+                        state: reqUserData.state,
+                        zipCode: reqUserData.zipCode,
+                        dateOfBirth: reqUserData.dateOfBirth,
+                        gender: reqUserData.gender,
+                        email: reqUserData.email
+                    })
+                    userData.save()
+                        .then( result => {
+                            res.status(201).json({
+                                message: "User was created!",
+                                result: result
+                            });
+                        })
+                        .catch (err => {
+                            const reqAuthData = req.body.authData;
+                            User.deleteOne({email: reqAuthData.email});
+                            res.status(500).json({
+                                message: "User was not created in UserData signup function routes/user.js",
+                                error: err
+                            });
+                        });
                 })
                 .catch (err => {
                     res.status(500).json({
-                        message: "User was not created in signup function routes/user.js",
+                        message: "User was not created in AuthData signup function routes/user.js",
                         error: err
                     });
                 });

@@ -11,7 +11,7 @@ export class WoundService {
     private wounds: Wound[] = [];
     private woundsUpdated = new Subject<Wound[]>();
 
-    constructor(private http: HttpClient, private router: Router) {}
+    constructor(private http: HttpClient) {}
 
     getWounds(){
         this.http

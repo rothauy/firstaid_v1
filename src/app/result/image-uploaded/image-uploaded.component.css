@@ -1,0 +1,24 @@
+input[type="file"] {
+    visibility: hidden;
+}
+
+image-preview { 
+    height: 5rem;
+    margin: 1rem 0;
+}
+
+.image-preview img {
+    height: 200px;
+    width: 320px;
+    object-fit: scale-down;
+}
+
+.placeFrame {
+    height: 300px;
+    width: 300px;
+    object-fit: scale-down;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 5px;
+    background-image: url(../../../assets/300x300.png);
+}

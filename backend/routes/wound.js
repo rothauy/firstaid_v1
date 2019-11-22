@@ -45,7 +45,6 @@ router.post(
         // creator: req.userData.userId
     })    
     wound.save().then(createdWound => {
-        console.log(createdWound);
         res.status(201).json({
             message: "A new wound type is added successfully",
             wound: {
@@ -84,7 +83,6 @@ router.put(
 router.get("", (req, res, next) => {
     Wound.find()
         .then( documents => {
-            console.log(documents);
             res.status(200).json({
                 message: "Data was fetched successfully",
                 wounds: documents

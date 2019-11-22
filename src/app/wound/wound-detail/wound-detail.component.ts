@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 })
 export class WoundDetailComponent implements OnInit {
   @Input() wound: Wound;
-  private authStatusSub: Subscription;
   userIsAuthenticated = false;
   
   constructor(

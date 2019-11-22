@@ -1,0 +1,15 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.variable-space {
+    margin-left: 5px;
+}
+
+mat-form-field {
+    width: 85%;
+}
+
+mat-spinner {
+    margin: auto;
+}

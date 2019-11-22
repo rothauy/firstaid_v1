@@ -1,0 +1,17 @@
+<div style="text-align: center;">
+    <form [formGroup]="form" (submit)="onSubmit()">
+        <div>
+            <button mat-stroked-button type="button" (click)="imagePicker.click()">Pick an image</button>
+            <input type="file" #imagePicker (change)="onImagePicked($event)">
+        </div>
+        <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid; else placeHolder">
+            <img [src]="imagePreview" [alt]="form.value.type">
+        </div>
+        <!-- <ng-template  #placeHolder>
+            <img class="placeFrame" src="../../../assets/300x300.png" alt="placeHolder">
+        </ng-template>   -->
+        <div style="padding-top: 20px;">
+            <button mat-stroked-button type="submit" *ngIf="form.get('image').valid">Submit</button>
+        </div>
+    </form>
+</div>

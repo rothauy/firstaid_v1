@@ -77,7 +77,7 @@ export class WoundCreateComponent implements OnInit {
         this.form.value.image
       )
     };
-    this.form.reset;
+    this.form.reset();
     this.dialogRef.close();
   }
 
