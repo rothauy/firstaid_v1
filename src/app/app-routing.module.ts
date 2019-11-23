@@ -6,18 +6,19 @@ import { LoginComponent } from './authentication/login/login.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { ResultComponent } from './result/result.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import { AuthGuard } from './authentication/auth.guard';
 
 
 const routes: Routes = [
     {path: '', component: WoundComponent},
     {path: 'classification', component: WoundComponent},
-    {path: 'result', component: ResultComponent},
+    {path: 'result', component: ResultComponent, canActivate: [AuthGuard]},
     {path: 'login', component: LoginComponent},
-    {path: 'signup', component: SignupComponent},
-    {path: 'profile', component: UserProfileComponent}
+    {path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard]}
 ]
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
+    providers: [AuthGuard]
 })
 export class AppRoutingModule {}

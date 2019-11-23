@@ -7,18 +7,18 @@
             <a class="navbar-brand" routerLink='/'>FirstAid</a>
         </div>
         <div class="navbar-collapse" [class.collapse]="collapse" (window:resize)="collapse = true">
-            <ul class="nav navbar-nav">
-                <li><a routerLink='result'>Result</a></li>
+            <ul class="nav navbar-nav" >
+                <li *ngIf="userIsAuthenticated"><a routerLink='result'>Result</a></li>
                 <li><a routerLink='classification'>Classification</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a (click)="onSignUp()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a routerLink='login'><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                <li class="dropdown" appDropdown>
+                <li *ngIf="!userIsAuthenticated"><a (click)="onSignUp()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li *ngIf="!userIsAuthenticated"><a routerLink='login'><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li *ngIf="userIsAuthenticated" class="dropdown" appDropdown>
                     <a class="dropdown-toggle" role="button">Manage<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a routerLink='profile'>Profile</a></li>
-                        <li><a>Logout</a></li>
+                        <li (click)="onLogOut()"><a>Logout</a></li>
                     </ul>
                 </li>
             </ul>

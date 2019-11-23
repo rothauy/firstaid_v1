@@ -18,6 +18,7 @@ mongoose.connect("mongodb+srv://firstaid:d9M3I1518EB4pvS0@cluster0-1hna2.mongodb
         });
 
 app.use(bodyParser.json());
+app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/images", express.static(path.join("backend/images")));
 

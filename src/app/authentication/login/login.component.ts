@@ -14,19 +14,21 @@ export class LoginComponent implements OnInit {
   isLoading = false;
 
   constructor(
-    public authService: AuthService, 
-    public router: Router,
+    private authService: AuthService, 
+    private router: Router,
     private dialog: MatDialog) {}
-
   ngOnInit() {
   }
+
 
   onLogin(form: NgForm) {
     if (form.invalid) {
       return;
     }
+    const email = form.value.email;
     this.isLoading = true;
-    this.authService.login(form.value.email, form.value.password);
+    this.authService.login(email.toLowerCase(), form.value.password);
+    this.router.navigate(['/']);
   }
 
   onSignUp() {

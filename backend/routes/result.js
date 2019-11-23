@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 
 const Result = require('../models/result');
+const checkAuth = require('../middleware/check-authentication');
 
 const router = express.Router();
 
@@ -33,6 +34,7 @@ const storage = multer.diskStorage({
 
 router.post(
     "",
+    checkAuth,
     multer({ storage }).single("image"),
     (req, res, next) => {
     res.status(200).json({

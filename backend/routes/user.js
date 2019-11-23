@@ -1,24 +1,25 @@
+
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const UserData = require('../models/userData');
+const checkAuth = require('../middleware/check-authentication');
 
 const router = express.Router();
 
 router.post("/signup", (req, res, next) => {
-    const authData = req.body.authData;
-    bcrypt.hash(authData.password, 10)
+    let reqAuthData = req.body.authData;
+    let reqUserData = req.body.userData;
+    bcrypt.hash(reqAuthData.password, 10)
         .then( hash => {
-            const reqAuthData = req.body.authData;
             const user = new User ({
                 email: reqAuthData.email,
                 password: hash
             });
             user.save()
                 .then( result => {
-                    const reqUserData = req.body.userData;
                     const userData = new UserData ({ 
                         firstName: reqUserData.firstName,
                         lastName: reqUserData.lastName,
@@ -58,13 +59,15 @@ router.post("/signup", (req, res, next) => {
 
 router.post("/login", (req, res, next) => {
     let fetchedUser;
+    
     User.findOne({ email: req.body.email })
         .then( user => {
             if (!user) {
                 return res.status(401).json({
-                    message: "Authentication fail in login function routes/user.js"
+                    message: "Authentication fail in findUser login function routes/user.js"
                 })
             }
+
 
             fetchedUser = user;
             return bcrypt.compare(req.body.password, user.password)
@@ -72,7 +75,7 @@ router.post("/login", (req, res, next) => {
         .then( result => {
             if (!result) {
                 return res.status(401).json({
-                    message: "Authentication fail in login function routes/user.js"
+                    message: "Authentication fail in login de-encryptUser function routes/user.js"
                 })
             }
 
@@ -88,8 +91,29 @@ router.post("/login", (req, res, next) => {
         })
         .catch( err => {
             return res.status(401).json({
-                message: "Authentication fail in login function routes/user.js",
+                message: "Authentication fail in createToken login function routes/user.js",
                 error: err
+            })
+        });
+})
+
+router.post("", (req, res, next) => {
+    const payload = jwt.verify(req.body, process.env.ACCESS_TOKEN_SECRET);
+    UserData.findOne({ email: payload.email })
+        .then( userProfile => {
+            if (!userProfile) {
+                return res.status(401).json({
+                    message: "Failed to fetch userProfile!"
+                })
+            }
+            res.status(200).json({
+                message: "Fetched UserProfile!",
+                userProfile: userProfile
+            })
+        })
+        .catch( err => {
+            return res.status(401).json({
+                message: "Failed to fetch userProfile!"
             })
         })
 })

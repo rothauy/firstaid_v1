@@ -21,8 +21,10 @@ export class SignupComponent implements OnInit {
   private mode = "create";
   private userId: string;
   private authId: string;
+  private email: string;
 
   constructor(
+    private authService: AuthService,
     public userService: UserService, 
     public dialogRef: MatDialogRef<SignupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -88,10 +90,12 @@ export class SignupComponent implements OnInit {
       return;
     }
     this.isLoading = true;
+    this.email = this.form.value.email;
+    this.email = this.email.toLowerCase();
     if (this.mode === "create") {
       this.authData = { 
         id: null,
-        email: this.form.value.email,
+        email: this.email,
         password: this.form.value.password };
       this.userData = {
         id: null,
@@ -104,7 +108,7 @@ export class SignupComponent implements OnInit {
         zipCode: this.form.value.zipCode,
         dateOfBirth: this.form.value.dateOfBirth,
         gender: this.form.value.gender,
-        email: this.form.value.email
+        email: this.email
       }
       this.userService.createUser(this.authData, this.userData);
 
@@ -130,6 +134,7 @@ export class SignupComponent implements OnInit {
     };
     this.form.reset();
     this.dialogRef.close();
+    this.authService.login(this.authData.email, this.authData.password);
   }
 
   onClose() {

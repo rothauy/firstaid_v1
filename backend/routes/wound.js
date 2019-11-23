@@ -34,6 +34,7 @@ const storage = multer.diskStorage({
 
 router.post(
     "", 
+    checkAuth,
     multer({ storage }).single("image"),
     (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
@@ -59,6 +60,7 @@ router.post(
 
 router.put(
     "/:id",
+    checkAuth,
     multer({ storage: storage }).single("image"),
     (req, res, next) => {
         let imagePath = req.body.imagePath;
@@ -105,6 +107,7 @@ router.get("/:id", (req, res, next) => {
 
 router.delete(
     "/:id", 
+    checkAuth,
     (req, res, next) => {
     Wound.deleteOne({_id: req.params.id})
         .then( result => {
@@ -116,5 +119,3 @@ router.delete(
 });
 
 module.exports = router;
-
-// Wound.deleteOne({_id: req.params.id, creator: req.userData.userId})

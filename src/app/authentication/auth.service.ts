@@ -11,6 +11,8 @@ export class AuthService {
     private token: string;
     private tokenTimer: any;
     private authStatusListener = new Subject<boolean>();
+    private userProfile: UserData;
+    private userProfileUpdated = new Subject<UserData>();
 
     constructor(private http: HttpClient, private router: Router) {}
 
@@ -24,6 +26,18 @@ export class AuthService {
 
     getAuthStatusListener() {
         return this.authStatusListener.asObservable();
+    }
+
+    getUserProfile() {
+        this.http
+            .post<{message: string, userProfile: any}>("http://localhost:3000/api/user", this.token)
+            .subscribe( responseData => {
+                this.userProfile = {
+                    ...responseData.userProfile,
+                    id: responseData.userProfile._id,
+                }
+                return this.userProfileUpdated;
+            })
     }
 
     login(email: string, password: string) {

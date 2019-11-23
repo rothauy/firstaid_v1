@@ -5,6 +5,7 @@ import { WoundService } from '../wound.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { WoundCreateComponent } from '../wound-create/wound-create.component';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/authentication/auth.service';
 
 @Component({
   selector: 'app-wound-list',
@@ -16,8 +17,11 @@ export class WoundListComponent implements OnInit, OnDestroy {
 
   wounds: Wound[] = []
   private woundsSub: Subscription;
+  userIsAuthenticated = false;
+  private authListenerSubs: Subscription;
 
   constructor(
+    private authService: AuthService,
     public woundsService: WoundService, 
     private dialog: MatDialog, 
     public router: Router) { }
@@ -27,7 +31,13 @@ export class WoundListComponent implements OnInit, OnDestroy {
     this.woundsSub = this.woundsService.getWoundUpdateListener()
       .subscribe( (wounds: Wound[]) => {
         this.wounds = wounds;
-      })
+      });
+    this.userIsAuthenticated = this.authService.getIsAuth();
+    this.authListenerSubs = this.authService
+      .getAuthStatusListener()
+      .subscribe(isAuthenticated => {
+        this.userIsAuthenticated = isAuthenticated;
+      });
   }
 
   ngOnDestroy() {

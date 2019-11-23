@@ -24,7 +24,6 @@ import { UserHistoryComponent } from './user/user-history/user-history.component
 import { UserComponent } from './user/user.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +41,7 @@ import { UserProfileComponent } from './user/user-profile/user-profile.component
     UserProfileComponent,
     UserComponent,
     DropdownDirective,
+    
   ],
   imports: [
     BrowserModule,

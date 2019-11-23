@@ -7,12 +7,12 @@
             style="max-height: 300px;">
     </div>
 </div>
-<div class="row">
+<div class="row" >
     <div class="col-xs-12">
         <h1 class="dropdown" appDropdown>{{ wound.type }}
-            <a
+            <a 
                 class="dropdown-toggle"><span class="glyphicon glyphicon-edit gi-sm"></span></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" *ngIf="userIsAuthenticated">
                     <li><a (click)="onEdit()">Edit</a></li>
                     <li><a (click)="onDelete()">Delete</a></li>
             </ul>
