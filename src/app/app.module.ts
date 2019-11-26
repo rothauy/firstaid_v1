@@ -15,7 +15,7 @@ import { ResultComponent } from './result/result.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DropdownDirective } from './shared/dropdown.directive';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,8 @@ import { MatDialogRef } from '@angular/material';
 import { UserHistoryComponent } from './user/user-history/user-history.component';
 import { UserComponent } from './user/user.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import { AuthInterceptor } from './authentication/auth.interceptor';
+import { HyphenDirective } from './shared/hyphen.directive';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,7 @@ import { UserProfileComponent } from './user/user-profile/user-profile.component
     UserProfileComponent,
     UserComponent,
     DropdownDirective,
-    
+    HyphenDirective
   ],
   imports: [
     BrowserModule,
@@ -51,12 +53,18 @@ import { UserProfileComponent } from './user/user-profile/user-profile.component
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
+    
   ],
   providers: [
     {
       provide: MatDialogRef,
       useValue: {}
     },
+    {
+      provide: HTTP_INTERCEPTORS, 
+      useClass: AuthInterceptor, 
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: [WoundCreateComponent, SignupComponent]

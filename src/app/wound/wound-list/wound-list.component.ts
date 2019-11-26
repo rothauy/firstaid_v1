@@ -19,6 +19,7 @@ export class WoundListComponent implements OnInit, OnDestroy {
   private woundsSub: Subscription;
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
+  private userRole: string;
 
   constructor(
     private authService: AuthService,
@@ -38,6 +39,9 @@ export class WoundListComponent implements OnInit, OnDestroy {
       .subscribe(isAuthenticated => {
         this.userIsAuthenticated = isAuthenticated;
       });
+    setTimeout(() => {
+      this.userRole = this.authService.getUserRole();
+    }, 500);
   }
 
   ngOnDestroy() {

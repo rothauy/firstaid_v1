@@ -35,7 +35,7 @@ export class ImageUploadedComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.resultService.getResult(this.imagePreview));
+    this.resultService.getResult(this.form.value.image);
   }
 
 

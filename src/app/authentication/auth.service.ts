@@ -4,6 +4,7 @@ import { AuthData } from './auth.model';
 import { Subject } from 'rxjs';
 import { Router, Data } from '@angular/router';
 import { UserData } from '../user/user.model';
+import  *  as CryptoJS from 'crypto-js';
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -11,13 +12,17 @@ export class AuthService {
     private token: string;
     private tokenTimer: any;
     private authStatusListener = new Subject<boolean>();
-    private userProfile: UserData;
     private userProfileUpdated = new Subject<UserData>();
+    private userRole: any;
 
     constructor(private http: HttpClient, private router: Router) {}
 
     getToken() {
         return this.token;
+    }
+
+    getUserRole() {
+        return CryptoJS.AES.decrypt(this.userRole, "This is my secret!").toString(CryptoJS.enc.Utf8);
     }
 
     getIsAuth() {
@@ -29,21 +34,20 @@ export class AuthService {
     }
 
     getUserProfile() {
-        this.http
-            .post<{message: string, userProfile: any}>("http://localhost:3000/api/user", this.token)
-            .subscribe( responseData => {
-                this.userProfile = {
-                    ...responseData.userProfile,
-                    id: responseData.userProfile._id,
-                }
-                return this.userProfileUpdated;
-            })
+        return this.http.post<{message: string, userProfile: any, userAuth: any}>("http://localhost:3000/api/user/getProfile", this.token);
+
+    }
+
+    getUserProfileUpdateListener() {
+        return this.userProfileUpdated.asObservable();
     }
 
     login(email: string, password: string) {
-        const authData: AuthData = {id: null, email: email, password: password };
-        this.http.post<{token: string, expiresIn: number}>("http://localhost:3000/api/user/login", authData)
+        const authData: AuthData = {id: null, email: email, password: password, role: null };
+        this.http.post<{token: string, expiresIn: number, role: string}>("http://localhost:3000/api/user/login", authData)
             .subscribe(response => {
+                const userRole = response.role;
+                this.userRole = CryptoJS.AES.encrypt(userRole, "This is my secret!").toString();
                 const token = response.token;
                 this.token = token;
                 if (token){
@@ -53,7 +57,7 @@ export class AuthService {
                     this.authStatusListener.next(true);
                     const now = new Date();
                     const expirationDate = new Date(now.getTime() + expireInDuration * 1000);
-                    this.saveAuthData(token, expirationDate);
+                    this.saveAuthData(token, expirationDate, this.userRole);
                     this.router.navigate(["/"]);
                 }
             });
@@ -61,6 +65,7 @@ export class AuthService {
 
     logout() {
         this.token = null;
+        this.userRole = null;
         this.isAuthenticated = false;
         this.authStatusListener.next(false);
         clearTimeout(this.tokenTimer);
@@ -75,6 +80,7 @@ export class AuthService {
             const expiresIn = authInfo.expirationDate.getTime() - now.getTime();
             if (expiresIn > 0) {
                 this.token = authInfo.token;
+                this.userRole = authInfo.role;
                 this.isAuthenticated = true;
                 this.setAuthTimer(expiresIn / 1000);
                 this.authStatusListener.next(true);
@@ -85,26 +91,29 @@ export class AuthService {
     private setAuthTimer(duration: number) {
         this.tokenTimer = setTimeout( () => {
             this.logout();
-        }, duration * 1000)
+        }, duration * 1000);
     }
 
-    private saveAuthData(token: string, expirationDate: Date) {
-        localStorage.setItem("token", this.token);
+    private saveAuthData(token: string, expirationDate: Date, role: string) {
+        localStorage.setItem("token", token);
         localStorage.setItem("expiration", expirationDate.toISOString());
+        localStorage.setItem("role", role);
     }
 
     private clearAuthData() {
         localStorage.removeItem("token");
         localStorage.removeItem("expiration");
+        localStorage.removeItem("role");
     }
 
     private getAuthData() {
         const token = localStorage.getItem("token");
         const expirationDate = localStorage.getItem("expiration");
-        if (!token || !expirationDate) {
+        const role = localStorage.getItem("role");
+        if (!token || !expirationDate || !role) {
             return;
         }
-        return {token: token, expirationDate: new Date (expirationDate)}
+        return {token: token, expirationDate: new Date (expirationDate), role: role};
     }
 
 }

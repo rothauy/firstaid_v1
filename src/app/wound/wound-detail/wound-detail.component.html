@@ -11,7 +11,7 @@
     <div class="col-xs-12">
         <h1 class="dropdown" appDropdown>{{ wound.type }}
             <a 
-                class="dropdown-toggle"><span class="glyphicon glyphicon-edit gi-sm"></span></a>
+                class="dropdown-toggle" *ngIf="userRole === 'admin'"><span class="glyphicon glyphicon-edit gi-sm"></span></a>
             <ul class="dropdown-menu" *ngIf="userIsAuthenticated">
                     <li><a (click)="onEdit()">Edit</a></li>
                     <li><a (click)="onDelete()">Delete</a></li>

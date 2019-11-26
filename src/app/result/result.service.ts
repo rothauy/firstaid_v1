@@ -7,12 +7,11 @@ export class ResultService {
 
     constructor(private http: HttpClient) {}
 
-    getResult(imagePath: string) {
-        const imageData = new FormData();
-        imageData.append("imagePath", imagePath);
-
+    getResult(image: File) {
+        const dummy = new FormData();
+        dummy.append("image",image, "something");
         this.http
-            .post<{message: string, type: string}>("http://localhost:3000/api/result", ImageData)
+            .post<{message: string, type: string}>("http://localhost:3000/api/result", dummy)
             .subscribe(result => {
                 return result;
             });

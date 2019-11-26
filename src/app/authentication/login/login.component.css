@@ -9,3 +9,8 @@ mat-spinner {
 .button-space {
     margin-left: 5px;
 }
+
+mat-card {
+    margin: auto;
+    max-width: 60%;
+}

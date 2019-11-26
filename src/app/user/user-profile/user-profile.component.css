@@ -1,4 +1,22 @@
 .gi-sm {
     font-size: 10px;
     color: black;
+    margin-left: 5px;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+mat-spinner {
+    margin: auto;
+}
+
+mat-card {
+    margin: auto;
+    max-width: 60%;
+}
+
+mat-toolbar {
+    margin-bottom: 10px;
 }

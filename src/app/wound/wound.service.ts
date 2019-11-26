@@ -3,8 +3,6 @@ import { Wound } from './wound.model';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { stringify } from 'querystring';
-import { Router } from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class WoundService {

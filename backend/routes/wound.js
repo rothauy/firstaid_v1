@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 
 const checkAuth = require('../middleware/check-authentication');
+const checkRole = require('../middleware/check-role');
 const Wound = require('../models/wound');
 
 const router = express.Router();
@@ -35,15 +36,15 @@ const storage = multer.diskStorage({
 router.post(
     "", 
     checkAuth,
+    checkRole,
     multer({ storage }).single("image"),
     (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
-    
+    console.log(req);
     const wound = new Wound({
         type: req.body.type,
         description: req.body.description,
         imagePath: url + "/images/" + req.file.filename,
-        // creator: req.userData.userId
     })    
     wound.save().then(createdWound => {
         res.status(201).json({
@@ -61,6 +62,7 @@ router.post(
 router.put(
     "/:id",
     checkAuth,
+    checkRole,
     multer({ storage: storage }).single("image"),
     (req, res, next) => {
         let imagePath = req.body.imagePath;
@@ -108,6 +110,7 @@ router.get("/:id", (req, res, next) => {
 router.delete(
     "/:id", 
     checkAuth,
+    checkRole,
     (req, res, next) => {
     Wound.deleteOne({_id: req.params.id})
         .then( result => {

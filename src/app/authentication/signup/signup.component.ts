@@ -64,10 +64,11 @@ export class SignupComponent implements OnInit {
       this.mode = "edit";
       this.userId = this.data.userData.id;
       this.authId = this.data.authData.id;
-
+      
+      console.log(this.data.userData.dateOfBirth.type);
       this.form.setValue({
         email: this.data.authData.email,
-        pass: null,
+        password: "Something",
         firstName: this.data.userData.firstName,
         lastName: this.data.userData.lastName,
         phoneNumber: this.data.userData.phoneNumber,
@@ -75,8 +76,9 @@ export class SignupComponent implements OnInit {
         city: this.data.userData.city,
         state: this.data.userData.state,
         zipCode: this.data.userData.zipCode,
-        dateOfBirth: this.data.userData.dateOfBirth,
+        dateOfBirth:  new Date (this.data.userData.dateOfBirth).toISOString().substr(0, 10),
         gender: this.data.userData.gender,
+        registerCode: "This will be something"
       });
     } else {
       this.mode = "create";
@@ -96,7 +98,8 @@ export class SignupComponent implements OnInit {
       this.authData = { 
         id: null,
         email: this.email,
-        password: this.form.value.password };
+        password: this.form.value.password,
+        role: "user" };
       this.userData = {
         id: null,
         firstName: this.form.value.firstName,
@@ -116,7 +119,8 @@ export class SignupComponent implements OnInit {
       this.authData = { 
         id: this.authId,
         email: this.form.value.email,
-        password: this.form.value.password };
+        password: this.form.value.password,
+        role: this.data.authData.role };
       this.userData = {
         id: this.userId,
         firstName: this.form.value.firstName,

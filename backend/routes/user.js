@@ -12,11 +12,13 @@ const router = express.Router();
 router.post("/signup", (req, res, next) => {
     let reqAuthData = req.body.authData;
     let reqUserData = req.body.userData;
+    console.log(reqAuthData);
     bcrypt.hash(reqAuthData.password, 10)
         .then( hash => {
             const user = new User ({
                 email: reqAuthData.email,
-                password: hash
+                password: hash,
+                role: reqAuthData.role
             });
             user.save()
                 .then( result => {
@@ -67,8 +69,6 @@ router.post("/login", (req, res, next) => {
                     message: "Authentication fail in findUser login function routes/user.js"
                 })
             }
-
-
             fetchedUser = user;
             return bcrypt.compare(req.body.password, user.password)
         })
@@ -78,15 +78,15 @@ router.post("/login", (req, res, next) => {
                     message: "Authentication fail in login de-encryptUser function routes/user.js"
                 })
             }
-
             const token = jwt.sign(
-                { email: fetchedUser.email, userId: fetchedUser._id },
+                { email: fetchedUser.email, userId: fetchedUser._id, role: fetchedUser.role },
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: "1h"});
             res.status(200).json({
                 message: "Token is created!",
                 token: token,
-                expiresIn: 3600
+                expiresIn: 3600,
+                role: fetchedUser.role
             });
         })
         .catch( err => {
@@ -97,7 +97,7 @@ router.post("/login", (req, res, next) => {
         });
 })
 
-router.post("", (req, res, next) => {
+router.post("/getProfile", checkAuth, (req, res, next) => {
     const payload = jwt.verify(req.body, process.env.ACCESS_TOKEN_SECRET);
     UserData.findOne({ email: payload.email })
         .then( userProfile => {
@@ -106,10 +106,19 @@ router.post("", (req, res, next) => {
                     message: "Failed to fetch userProfile!"
                 })
             }
-            res.status(200).json({
-                message: "Fetched UserProfile!",
-                userProfile: userProfile
-            })
+            User.findOne({ email: payload.email })
+                .then( userAuth => {
+                    if (!userAuth){
+                        return res.status(401).json({
+                            message: "Failed to fetch userAuth!"
+                        })
+                    }
+                    res.status(200).json({
+                        message: "Fetched UserProfile!",
+                        userProfile: userProfile,
+                        userAuth: userAuth
+                    })
+                })
         })
         .catch( err => {
             return res.status(401).json({

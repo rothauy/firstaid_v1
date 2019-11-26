@@ -1,7 +1,8 @@
 const express = require('express');
 const multer = require('multer');
 
-const Result = require('../models/result');
+const UserHistory = require('../models/userHistory')
+
 const checkAuth = require('../middleware/check-authentication');
 
 const router = express.Router();
@@ -19,7 +20,7 @@ const storage = multer.diskStorage({
         if (isValid) {
             error = null;
         }
-        cb(error, "backend/images");
+        cb(error, "backend/images/users");
         
     },
     filename: (req, file, cb) => {
@@ -37,10 +38,48 @@ router.post(
     checkAuth,
     multer({ storage }).single("image"),
     (req, res, next) => {
-    res.status(200).json({
-        message: "Dummy Success",
-        type: 1
+    const url = req.protocol + "://" + req.get("host");
+    req.body.type = "cut1";
+    const userHistory = new UserHistory({
+        type: req.body.type,
+        imagePath: url + "/images/users/" + req.file.filename,
+        creator: req.userData.userId
+    })    
+    userHistory.save().then(createdHistory => {
+        console.log(createdHistory);
+        res.status(201).json({
+            message: "A new history is added successfully",
+            type: "1",
+            userHistory: {
+                id: createdHistory._id,
+                type: createdHistory.type,
+                imagePath: createdHistory.imagePath
+            }
+        });
     });
+});
+
+router.get("/histories", checkAuth, (req, res, next) => {
+    UserHistory.find().then( userHistories => {
+        console.log(userHistories);
+        res.status(200).json({
+            message: "UserHistories are fetched successfully",
+            histories: userHistories
+        });
+    });
+});
+
+router.delete(
+    "/histories/:id", 
+    checkAuth,
+    (req, res, next) => {
+    UserHistory.deleteOne({_id: req.params.id})
+        .then( result => {
+            console.log(result);
+            res.status(200).json({ 
+                message: "A history was delete!"
+            });
+        });
 });
 
 module.exports = router;
