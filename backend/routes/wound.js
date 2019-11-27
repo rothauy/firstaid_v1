@@ -40,23 +40,29 @@ router.post(
     multer({ storage }).single("image"),
     (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
-    console.log(req);
     const wound = new Wound({
         type: req.body.type,
         description: req.body.description,
         imagePath: url + "/images/" + req.file.filename,
     })    
-    wound.save().then(createdWound => {
-        res.status(201).json({
-            message: "A new wound type is added successfully",
-            wound: {
-                id: createdWound._id,
-                type: createdWound.type,
-                description: createdWound.description,
-                imagePath: createdWound.imagePath
-            }
+    wound.save()
+        .then(createdWound => {
+            res.status(201).json({
+                message: "A new wound type is added successfully",
+                wound: {
+                    id: createdWound._id,
+                    type: createdWound.type,
+                    description: createdWound.description,
+                    imagePath: createdWound.imagePath
+                }
+            });
+        })
+        .catch( err => {
+            return res.status(401).json({
+                title: "Failed to save a new wound",
+                message: "Please contact the support team."
+            })
         });
-    });
 });
 
 router.put(
@@ -76,12 +82,19 @@ router.put(
             description: req.body.description,
             imagePath: imagePath,
         });
-        Wound.updateOne({_id: req.params.id }, wound).then(updatedWound => {
-            res.status(200).json({ 
-                message: "Successfully update a wound in backend/route/wound.js",
-                wound: wound
+        Wound.updateOne({_id: req.params.id }, wound)
+            .then(updatedWound => {
+                res.status(200).json({ 
+                    message: "Successfully update a wound in backend/route/wound.js",
+                    wound: wound
+                });
+            })
+            .catch( err => {
+                return res.status(500).json({
+                    title: "Failed to update the selected wound",
+                    message: "Please contact the support team."
+                })
             });
-        });
 });
 
 router.get("", (req, res, next) => {
@@ -92,19 +105,30 @@ router.get("", (req, res, next) => {
                 wounds: documents
             });
         })
-        .catch( () => {
-            console.log("The Collections were not found")
+        .catch( err => {
+            return res.status(401).json({
+                title: "Failed to fetch wounds",
+                message: "Please contact the support team."
+            })
         });
-});
+    }
+);
 
 router.get("/:id", (req, res, next) => {
-    Wound.findById(req.params.id).then(wound => {
-        if (wound) {
-            res.status(200).json(wound);
-        } else {
-            res.status(404).json({ message: "Wound was not found!" });
-        }
-    });
+    Wound.findById(req.params.id)
+        .then(wound => {
+            if (wound) {
+                res.status(200).json(wound);
+            } else {
+                res.status(404).json({ message: "Wound was not found!" });
+            }
+        })
+        .catch( err => {
+            return res.status(401).json({
+                title: "Failed to get a wound",
+                message: "Please contact the support team."
+            })
+        });
 });
 
 router.delete(
@@ -118,6 +142,12 @@ router.delete(
             res.status(200).json({ 
                 message: "A type of wound was delete!"
             });
+        })
+        .catch( err => {
+            return res.status(401).json({
+                title: "Failed to delete a wound",
+                message: "Please contact the support team."
+            })
         });
 });
 

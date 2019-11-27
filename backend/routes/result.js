@@ -45,28 +45,42 @@ router.post(
         imagePath: url + "/images/users/" + req.file.filename,
         creator: req.userData.userId
     })    
-    userHistory.save().then(createdHistory => {
-        console.log(createdHistory);
-        res.status(201).json({
-            message: "A new history is added successfully",
-            type: "1",
-            userHistory: {
-                id: createdHistory._id,
-                type: createdHistory.type,
-                imagePath: createdHistory.imagePath
-            }
-        });
-    });
+    userHistory.save()
+        .then(createdHistory => {
+            console.log(createdHistory);
+            res.status(201).json({
+                message: "A new history is added successfully",
+                type: "1",
+                userHistory: {
+                    id: createdHistory._id,
+                    type: createdHistory.type,
+                    imagePath: createdHistory.imagePath
+                }
+            });
+        })
+        .catch( err => {
+            return res.status(401).json({
+                title: "Creating new history failed",
+                message: "Please contact the support team."
+            })
+        });;
 });
 
 router.get("/histories", checkAuth, (req, res, next) => {
-    UserHistory.find().then( userHistories => {
-        console.log(userHistories);
-        res.status(200).json({
-            message: "UserHistories are fetched successfully",
-            histories: userHistories
+    UserHistory.find()
+        .then( userHistories => {
+            console.log(userHistories);
+            res.status(200).json({
+                message: "UserHistories are fetched successfully",
+                histories: userHistories
+            });
+        })
+        .catch( err => {
+            return res.status(401).json({
+                title: "Failed to get histories",
+                message: "Please contact the support team."
+            })
         });
-    });
 });
 
 router.delete(
@@ -79,6 +93,12 @@ router.delete(
             res.status(200).json({ 
                 message: "A history was delete!"
             });
+        })
+        .catch( err => {
+            return res.status(401).json({
+                title: "Failed to delete histories",
+                message: "Please contact the support team."
+            })
         });
 });
 

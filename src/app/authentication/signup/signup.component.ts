@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
@@ -6,31 +6,38 @@ import { MatDialogRef, MAT_DIALOG_DATA, _countGroupLabelsBeforeOption } from '@a
 import { UserData } from 'src/app/user/user.model';
 import { AuthData } from '../auth.model';
 import { UserService } from 'src/app/user/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
   form: FormGroup;
   userData: UserData;
   authData: AuthData;
+  today = new Date();
 
   private mode = "create";
   private userId: string;
   private authId: string;
   private email: string;
 
+  private authStatusSub: Subscription;
+
   constructor(
-    private authService: AuthService,
     public userService: UserService, 
+    private authService: AuthService,
     public dialogRef: MatDialogRef<SignupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router) {}
 
   ngOnInit() {
+    this.authStatusSub = this.userService.getHistoryUpdateListener().subscribe(authStatus =>{
+      this.isLoading = false;
+    });
     this.form = new FormGroup({
       firstName: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(1)]}),
@@ -54,7 +61,7 @@ export class SignupComponent implements OnInit {
       zipCode: new FormControl(null, {
         validators: [Validators.required]}),
       dateOfBirth: new FormControl(null, {
-        validators: [Validators.required]}),
+        validators: [Validators.required], updateOn: "submit"}),
       gender: new FormControl(null, {
         validators: [Validators.required]}),
       registerCode: new FormControl(null, {
@@ -64,11 +71,10 @@ export class SignupComponent implements OnInit {
       this.mode = "edit";
       this.userId = this.data.userData.id;
       this.authId = this.data.authData.id;
-      
-      console.log(this.data.userData.dateOfBirth.type);
+    
       this.form.setValue({
         email: this.data.authData.email,
-        password: "Something",
+        password: this.data.authData.password,
         firstName: this.data.userData.firstName,
         lastName: this.data.userData.lastName,
         phoneNumber: this.data.userData.phoneNumber,
@@ -80,20 +86,25 @@ export class SignupComponent implements OnInit {
         gender: this.data.userData.gender,
         registerCode: "This will be something"
       });
+      this.form.controls.email.disable();
     } else {
       this.mode = "create";
       this.userId = null;
       this.authId = null;
-    }
+    };
   }
 
-  onSignUp() {
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
+  }
+
+  onSignUp() { 
     if (this.form.invalid) {
       return;
     }
     this.isLoading = true;
     this.email = this.form.value.email;
-    this.email = this.email.toLowerCase();
+
     if (this.mode === "create") {
       this.authData = { 
         id: null,
@@ -116,6 +127,9 @@ export class SignupComponent implements OnInit {
       this.userService.createUser(this.authData, this.userData);
 
     } else {
+      if (this.form.value.password === this.data.authData.password) {
+        this.form.value.password = null;
+      }
       this.authData = { 
         id: this.authId,
         email: this.form.value.email,
@@ -135,10 +149,16 @@ export class SignupComponent implements OnInit {
         email: this.form.value.email
       }
       this.userService.updateUser(this.authData, this.userData);
+      setTimeout(() => {
+        if (this.form.value.password !== null) {
+          this.authService.login(this.authData.email, this.authData.password);
+        }
+        this.router.navigate(['/profileUpdated']);
+      }, 2000);
     };
     this.form.reset();
     this.dialogRef.close();
-    this.authService.login(this.authData.email, this.authData.password);
+
   }
 
   onClose() {

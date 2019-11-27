@@ -9,7 +9,7 @@
         <div class="navbar-collapse" [class.collapse]="collapse" (window:resize)="collapse = true">
             <ul class="nav navbar-nav" >
                 <li *ngIf="userIsAuthenticated"><a routerLink='result'>Result</a></li>
-                <li><a routerLink='classification'>Classification</a></li>
+                <li *ngIf="userIsAuthenticated"><a routerLink='classification'>Classification</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li *ngIf="!userIsAuthenticated"><a (click)="onSignUp()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>

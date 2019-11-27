@@ -12,7 +12,6 @@ export class AuthService {
     private token: string;
     private tokenTimer: any;
     private authStatusListener = new Subject<boolean>();
-    private userProfileUpdated = new Subject<UserData>();
     private userRole: any;
 
     constructor(private http: HttpClient, private router: Router) {}
@@ -22,6 +21,9 @@ export class AuthService {
     }
 
     getUserRole() {
+        if (!this.userRole) {
+            return;
+        }
         return CryptoJS.AES.decrypt(this.userRole, "This is my secret!").toString(CryptoJS.enc.Utf8);
     }
 
@@ -36,10 +38,6 @@ export class AuthService {
     getUserProfile() {
         return this.http.post<{message: string, userProfile: any, userAuth: any}>("http://localhost:3000/api/user/getProfile", this.token);
 
-    }
-
-    getUserProfileUpdateListener() {
-        return this.userProfileUpdated.asObservable();
     }
 
     login(email: string, password: string) {
@@ -60,6 +58,9 @@ export class AuthService {
                     this.saveAuthData(token, expirationDate, this.userRole);
                     this.router.navigate(["/"]);
                 }
+            }, error => {
+                this.router.navigate(["/login"]);
+                this.authStatusListener.next(false);
             });
     }
 

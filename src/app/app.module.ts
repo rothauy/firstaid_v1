@@ -25,6 +25,8 @@ import { UserComponent } from './user/user.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
 import { AuthInterceptor } from './authentication/auth.interceptor';
 import { HyphenDirective } from './shared/hyphen.directive';
+import { ErrorComponent } from './error/error.component';
+import { ErrorInterceptor } from './error-interceptor';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { HyphenDirective } from './shared/hyphen.directive';
     UserProfileComponent,
     UserComponent,
     DropdownDirective,
-    HyphenDirective
+    HyphenDirective,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -64,9 +67,14 @@ import { HyphenDirective } from './shared/hyphen.directive';
       provide: HTTP_INTERCEPTORS, 
       useClass: AuthInterceptor, 
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS, 
+      useClass: ErrorInterceptor, 
+      multi: true
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [WoundCreateComponent, SignupComponent]
+  entryComponents: [WoundCreateComponent, SignupComponent, ErrorComponent]
 })
 export class AppModule { }

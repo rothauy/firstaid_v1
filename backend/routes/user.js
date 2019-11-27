@@ -12,7 +12,6 @@ const router = express.Router();
 router.post("/signup", (req, res, next) => {
     let reqAuthData = req.body.authData;
     let reqUserData = req.body.userData;
-    console.log(reqAuthData);
     bcrypt.hash(reqAuthData.password, 10)
         .then( hash => {
             const user = new User ({
@@ -45,18 +44,84 @@ router.post("/signup", (req, res, next) => {
                             const reqAuthData = req.body.authData;
                             User.deleteOne({email: reqAuthData.email});
                             res.status(500).json({
-                                message: "User was not created in UserData signup function routes/user.js",
+                                title: "Signup failed",
+                                message: "Provided information is incorrect.",
                                 error: err
                             });
                         });
                 })
                 .catch (err => {
                     res.status(500).json({
-                        message: "User was not created in AuthData signup function routes/user.js",
+                        title: "Signup failed",
+                        message: "Email is already registered.",
                         error: err
                     });
                 });
         });
+});
+
+router.put("/signup", checkAuth, (req, res, next) => {
+    let reqAuthData = req.body.authData;
+    let reqUserData = req.body.userData;
+    if (reqAuthData.password == null) {
+        const userData = new UserData({
+            ...reqUserData,
+            _id: reqUserData.id,
+        });
+        console.log(userData);
+        UserData.updateOne({_id: reqUserData.id}, userData)
+            .then(result => {
+                console.log(result);
+                res.status(200).json({
+                    message: "Successfully update an userData profile in backend/route/user.js",
+                    result: result
+                })
+            })
+            .catch( err => {
+                return res.status(500).json({
+                    title: "Failed to update your user's profile",
+                    message: "Please contact the support team."
+                })
+            });
+    } else {
+        bcrypt.hash(reqAuthData.password, 10)
+            .then( hash => {
+                const user = new User ({
+                    _id: reqAuthData.id,
+                    email: reqAuthData.email,
+                    password: hash,
+                    role: reqAuthData.role
+                });
+                User.updateOne({_id: reqAuthData.id}, user)
+                    .then(result => {
+                        console.log(result);
+                        const userData = new UserData ({
+                            ...reqUserData,
+                            _id: reqUserData.id
+                        });
+                        UserData.updateOne({_id: reqUserData.id}, userData)
+                            .then(result => {
+                                console.log(result);
+                                res.status(201).json({
+                                    message: "userProfile was updated.",
+                                    result: result
+                                });
+                            })
+                            .catch( err => {
+                                return res.status(500).json({
+                                    title: "Failed to update your user's profile",
+                                    message: "Please contact the support team."
+                                });
+                            });
+                    })
+            })
+            .catch( err => {
+                return res.status(500).json({
+                    title: "Failed to update your user's password",
+                    message: "Please contact the support team."
+                });
+            });
+    };
 });
 
 router.post("/login", (req, res, next) => {
@@ -66,7 +131,8 @@ router.post("/login", (req, res, next) => {
         .then( user => {
             if (!user) {
                 return res.status(401).json({
-                    message: "Authentication fail in findUser login function routes/user.js"
+                    Title: "Login failed",
+                    message: "User is not found."
                 })
             }
             fetchedUser = user;
@@ -75,7 +141,8 @@ router.post("/login", (req, res, next) => {
         .then( result => {
             if (!result) {
                 return res.status(401).json({
-                    message: "Authentication fail in login de-encryptUser function routes/user.js"
+                    title: "Login failed",
+                    message: "Incorrect email or password."
                 })
             }
             const token = jwt.sign(
@@ -91,8 +158,8 @@ router.post("/login", (req, res, next) => {
         })
         .catch( err => {
             return res.status(401).json({
-                message: "Authentication fail in createToken login function routes/user.js",
-                error: err
+                title: "Login failed",
+                message: "Incorrect email or password."
             })
         });
 })
@@ -103,14 +170,16 @@ router.post("/getProfile", checkAuth, (req, res, next) => {
         .then( userProfile => {
             if (!userProfile) {
                 return res.status(401).json({
-                    message: "Failed to fetch userProfile!"
+                    title: "Failed to fetch profile",
+                    message: "Please contact the support team."
                 })
             }
             User.findOne({ email: payload.email })
                 .then( userAuth => {
                     if (!userAuth){
                         return res.status(401).json({
-                            message: "Failed to fetch userAuth!"
+                            title: "Failed to authenticate user",
+                            message: "Please contact the support team."
                         })
                     }
                     res.status(200).json({
@@ -122,9 +191,10 @@ router.post("/getProfile", checkAuth, (req, res, next) => {
         })
         .catch( err => {
             return res.status(401).json({
-                message: "Failed to fetch userProfile!"
+                title: "Failed to get profile",
+                message: "Please contact the support team."
             })
-        })
+        });
 })
 
 module.exports = router;
