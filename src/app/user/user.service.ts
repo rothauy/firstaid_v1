@@ -8,6 +8,11 @@ import { UserHistory } from './user.history.model';
 import { Subject } from 'rxjs';
 import { AuthService } from '../authentication/auth.service';
 
+import { environment } from '../../environments/environment';
+
+const BACKEND_URL_USER = environment.apiURL + "/user/";
+const BACKEND_URL_RESULT = environment.apiURL + "/result/";
+
 @Injectable({ providedIn: "root" })
 export class UserService {
     private histories: UserHistory[] = [];
@@ -17,7 +22,7 @@ export class UserService {
     constructor(private http: HttpClient, private router: Router, private authService: AuthService ) {}
 
     createUser(authData: AuthData, userData: UserData) {
-        this.http.post("http://localhost:3000/api/user/signup", {authData, userData}).subscribe(() => {
+        this.http.post(BACKEND_URL_USER + "signup", {authData, userData}).subscribe(() => {
             this.router.navigate["/login"];
         }, error => {
             this.router.navigate["/login"];
@@ -26,8 +31,12 @@ export class UserService {
     }
 
     updateUser(authData: AuthData, userData: UserData) {
-        this.http.put("http://localhost:3000/api/user/signup", {authData, userData})
+        this.http.put(BACKEND_URL_USER + "signup", {authData, userData})
         .subscribe( response => {
+            this.router.navigate["/profileUpdated"];
+        }, error => {
+            this.router.navigate["/profileUpdated"];
+            this.userStatusUpdated.next(false);
         });
     }
 
@@ -37,7 +46,7 @@ export class UserService {
 
     getHistories() {
         this.http
-            .get<{ message: string, histories: any }>("http://localhost:3000/api/result/histories")
+            .get<{ message: string, histories: any }>(BACKEND_URL_RESULT + "histories")
             .pipe(
                 map(historyData => {
                     return historyData.histories.map(history => {
@@ -60,7 +69,7 @@ export class UserService {
     }
 
     deleteHistory(id: string) {
-        this.http.delete("http://localhost:3000/api/result/histories/" + id)
+        this.http.delete(BACKEND_URL_RESULT + "histories/" + id)
             .subscribe(() => {
                 const updatedHistories = this.histories.filter(history => history.id !== id);
                 this.histories = updatedHistories;

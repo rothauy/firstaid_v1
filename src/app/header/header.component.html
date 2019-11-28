@@ -13,7 +13,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li *ngIf="!userIsAuthenticated"><a (click)="onSignUp()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li *ngIf="!userIsAuthenticated"><a routerLink='login'><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li *ngIf="!userIsAuthenticated"><a routerLink='/login'><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 <li *ngIf="userIsAuthenticated" class="dropdown" appDropdown>
                     <a class="dropdown-toggle" role="button">Manage<span class="caret"></span></a>
                     <ul class="dropdown-menu">

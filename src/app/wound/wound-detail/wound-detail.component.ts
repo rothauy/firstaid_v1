@@ -33,7 +33,6 @@ export class WoundDetailComponent implements OnInit, OnDestroy {
       });
     setTimeout(() => {
       this.userRole = this.authService.getUserRole();
-      console.log(this.userRole);
     }, 500);
   }
 

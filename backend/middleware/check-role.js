@@ -1,12 +1,18 @@
 module.exports = (req, res, next) => {
     try {
-        if (req.userData.role == "admin") {
+        if (req.userData.role === "admin") {
             next();
-        }
+        } else {
+            res.status(401).json({
+                title: "Authorization Error",
+                message: "You do not have the privilage to make the change. Please contact the support team.",
+            })
+        } 
     }
     catch (error) {
         res.status(401).json({
-            message: "Authorization Error in check-role.js",
+            title: "Authorization Error",
+            message: "You do not have the privilage to make the change. Please contact the support team.",
             error: error
         })
     }

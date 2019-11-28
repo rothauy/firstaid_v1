@@ -9,7 +9,6 @@ import { UserService } from 'src/app/user/user.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
@@ -61,7 +60,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       zipCode: new FormControl(null, {
         validators: [Validators.required]}),
       dateOfBirth: new FormControl(null, {
-        validators: [Validators.required], updateOn: "submit"}),
+        validators: [Validators.required]}),
       gender: new FormControl(null, {
         validators: [Validators.required]}),
       registerCode: new FormControl(null, {

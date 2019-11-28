@@ -6,6 +6,10 @@ import { Router, Data } from '@angular/router';
 import { UserData } from '../user/user.model';
 import  *  as CryptoJS from 'crypto-js';
 
+import { environment } from '../../environments/environment';
+
+const BACKEND_URL = environment.apiURL + "/user/";
+
 @Injectable({ providedIn: "root" })
 export class AuthService {
     private isAuthenticated = false;
@@ -36,13 +40,13 @@ export class AuthService {
     }
 
     getUserProfile() {
-        return this.http.post<{message: string, userProfile: any, userAuth: any}>("http://localhost:3000/api/user/getProfile", this.token);
+        return this.http.post<{message: string, userProfile: any, userAuth: any}>(BACKEND_URL + "getProfile", this.token);
 
     }
 
     login(email: string, password: string) {
         const authData: AuthData = {id: null, email: email, password: password, role: null };
-        this.http.post<{token: string, expiresIn: number, role: string}>("http://localhost:3000/api/user/login", authData)
+        this.http.post<{token: string, expiresIn: number, role: string}>(BACKEND_URL + "login", authData)
             .subscribe(response => {
                 const userRole = response.role;
                 this.userRole = CryptoJS.AES.encrypt(userRole, "This is my secret!").toString();

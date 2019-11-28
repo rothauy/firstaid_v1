@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { SignupComponent } from '../signup/signup.component';
@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
+  form: FormGroup;
 
   private authStatusSub: Subscription;
 
@@ -24,6 +25,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authStatusSub = this.authService.getAuthStatusListener().subscribe( authStatus => {
       this.isLoading = false;
+    });
+    this.form = new FormGroup({
+      email: new FormControl(null, {
+        validators: [Validators.required, Validators.email]}),
+      password: new FormControl(null, {
+          validators: [Validators.required, Validators.minLength(8)]})
     })
   }
 
@@ -31,13 +38,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authStatusSub.unsubscribe();
   }
 
-  onLogin(form: NgForm) {
-    if (form.invalid) {
+  onLogin() {
+    if (this.form.invalid) {
       return;
     }
-    const email = form.value.email;
+    const email = this.form.value.email;
     this.isLoading = true;
-    this.authService.login(email.toLowerCase(), form.value.password);
+    this.authService.login(email.toLowerCase(), this.form.value.password);
     this.router.navigate(['/']);
   }
 

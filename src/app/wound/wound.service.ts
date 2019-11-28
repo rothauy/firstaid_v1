@@ -4,6 +4,10 @@ import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
+import { environment } from '../../environments/environment';
+
+const BACKEND_URL = environment.apiURL + "/wounds/";
+
 @Injectable({providedIn: 'root'})
 export class WoundService {
     private wounds: Wound[] = [];
@@ -13,7 +17,7 @@ export class WoundService {
 
     getWounds(){
         this.http
-            .get<{message: string, wounds: any}>("http://localhost:3000/api/wounds")
+            .get<{message: string, wounds: any}>(BACKEND_URL)
             .pipe(map( (woundData) => {
                 return woundData.wounds.map(wound => {
                     return {
@@ -37,7 +41,7 @@ export class WoundService {
 
     getWound(id: string){
         return this.http.get<{_id: string, type: string, description: string, imagePath: string}>(
-            "http://localhost:3000/api/wounds/" + id
+            BACKEND_URL + id
         );
     }
 
@@ -47,7 +51,7 @@ export class WoundService {
         woundData.append("description", description);
         woundData.append("image", image, type);
         this.http
-            .post<{message: string, wound: Wound}>("http://localhost:3000/api/wounds", woundData)
+            .post<{message: string, wound: Wound}>(BACKEND_URL, woundData)
             .subscribe(responseData => {
                 const wound: Wound = {
                     id: responseData.wound.id,
@@ -77,7 +81,7 @@ export class WoundService {
             };
         }
         this.http
-            .put<{message: string, wound: Wound}>("http://localhost:3000/api/wounds/" + id, woundData)
+            .put<{message: string, wound: Wound}>(BACKEND_URL + id, woundData)
             .subscribe( responseData => {
                 const updatedWounds = [...this.wounds];
                 const oldWoundIndex = updatedWounds.findIndex(p => p.id === id);
@@ -94,7 +98,7 @@ export class WoundService {
     }
 
     deleteWound(id: string) {
-        this.http.delete("http://localhost:3000/api/wounds/" + id)
+        this.http.delete(BACKEND_URL + id)
             .subscribe(() => {
                 const updatedWounds = this.wounds.filter(wound => wound.id !== id);
                 this.wounds = updatedWounds;
