@@ -11,7 +11,7 @@ router.post(
     "",
     checkAuth,
     extractImageFile,
-    ResultController.createUserHistory
+    ResultController.classifyWound
     );
 
 router.get("/histories", checkAuth, ResultController.fetchUserHistories);

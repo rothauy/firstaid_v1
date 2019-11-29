@@ -1,35 +1,52 @@
-const UserHistory = require('../models/userHistory')
+const UserHistory = require('../models/userHistory');
+const Wound = require('../models/wound');
 
-exports.createUserHistory = (req, res, next) => {
+const woundList = {
+    1: "5de18864ed51af07b5571e28",
+    2: "5de18886ed51af07b5571e29",
+    3: "5de188aaed51af07b5571e2a",
+    4: "5de188caed51af07b5571e2b",
+    5: "5de188eced51af07b5571e2c",
+    6: "5de1891bed51af07b5571e2d",
+    7: "5de18944ed51af07b5571e2e"
+};
+
+exports.classifyWound = (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
-    req.body.type = "cut1";
-    const userHistory = new UserHistory({
-        type: req.body.type,
-        imagePath: url + "/images/users/" + req.file.filename,
-        creator: req.userData.userId
-    })    
-    userHistory.save()
-        .then(createdHistory => {
-            res.status(201).json({
-                message: "A new history is added successfully",
-                type: "1",
-                userHistory: {
-                    id: createdHistory._id,
-                    type: createdHistory.type,
-                    imagePath: createdHistory.imagePath
-                }
+    let type = Math.round(Math.random() * 7) + 1;
+
+    Wound.findById(woundList[type])
+        .then(result => {
+            const saveResult = result;
+            const userHistory = new UserHistory({
+                type: result.type,
+                imagePath: url + "/images" + req.file.filename,
+                creator: req.userData.userId
             });
+            userHistory.save()
+                .then(createdHistory => {
+                    res.status(201).json({
+                        message: "A new history is added successfully",
+                        wound: saveResult
+                    });
+                })
+                .catch( err => {
+                    return res.status(401).json({
+                        title: "Creating new history failed",
+                        message: "Please contact the support team."
+                    });
+                })
         })
-        .catch( err => {
+        .catch(err => {
             return res.status(401).json({
-                title: "Creating new history failed",
-                message: "Please contact the support team."
-            })
-        });;
+                title: "Wound is not classifid",
+                message: "It is not in our scope."
+            });
+        });
 }
 
 exports.fetchUserHistories = (req, res, next) => {
-    UserHistory.find()
+    UserHistory.find().sort({_id:-1})
         .then( userHistories => {
             res.status(200).json({
                 message: "UserHistories are fetched successfully",

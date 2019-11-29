@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { mimeType } from 'src/app/shared/mime-type.validator';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ResultService } from '../result.service';
+import { Wound } from 'src/app/wound/wound.model';
 
 @Component({
   selector: 'app-image-uploaded',
@@ -9,6 +10,9 @@ import { ResultService } from '../result.service';
   styleUrls: ['./image-uploaded.component.css']
 })
 export class ImageUploadedComponent implements OnInit {
+  @Output() typeWasSelected = new EventEmitter<object>();
+  selectedType: string;
+
   form: FormGroup;
   imagePreview: string;
 
@@ -35,7 +39,9 @@ export class ImageUploadedComponent implements OnInit {
   }
 
   onSubmit() {
-    this.resultService.getResult(this.form.value.image);
+    this.resultService.getResult(this.form.value.image).subscribe(result => {
+      this.typeWasSelected.emit(result.wound);
+    });
   }
 
 

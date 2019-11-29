@@ -12,13 +12,3 @@ image-preview {
     width: 320px;
     object-fit: scale-down;
 }
-
-.placeFrame {
-    height: 300px;
-    width: 300px;
-    object-fit: scale-down;
-    border: 1px solid black;
-    border-radius: 4px;
-    padding: 5px;
-    background-image: url(../../../assets/300x300.png);
-}

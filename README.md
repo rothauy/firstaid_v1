@@ -30,5 +30,7 @@ Mango DB Password: d9M3I1518EB4pvS0
 
 mongo "mongodb+srv://cluster0-1hna2.mongodb.net/test"  --username firstaid --password d9M3I1518EB4pvS0
 
+Register Code: v#&t8k
+
 Admin Test User: testuser1@gmail.com Test1234@
 TestUser: test12345@gmail.com   Test1234!

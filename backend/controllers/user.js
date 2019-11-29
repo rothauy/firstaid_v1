@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
@@ -7,6 +7,12 @@ const UserData = require('../models/userData');
 exports.createUser = (req, res, next) => {
     let reqAuthData = req.body.authData;
     let reqUserData = req.body.userData;
+    if (reqUserData.registerCode != "v#&t8k") {
+        res.status(500).json({
+            title: "Signup failed",
+            message: "Provided register code is incorrect.",
+        });
+    }
     bcrypt.hash(reqAuthData.password, 10)
         .then( hash => {
             const user = new User ({
@@ -26,7 +32,8 @@ exports.createUser = (req, res, next) => {
                         zipCode: reqUserData.zipCode,
                         dateOfBirth: reqUserData.dateOfBirth,
                         gender: reqUserData.gender,
-                        email: reqUserData.email
+                        email: reqUserData.email,
+                        registerCode: reqUserData.registerCode
                     })
                     userData.save()
                         .then( result => {
@@ -36,13 +43,15 @@ exports.createUser = (req, res, next) => {
                             });
                         })
                         .catch (err => {
-                            const reqAuthData = req.body.authData;
-                            User.deleteOne({email: reqAuthData.email});
-                            res.status(500).json({
-                                title: "Signup failed",
-                                message: "Provided information is incorrect.",
-                                error: err
-                            });
+                            console.log(reqAuthData);
+                            User.deleteOne({email: reqAuthData.email})
+                                .then( result => {
+                                    res.status(500).json({
+                                        title: "Signup failed",
+                                        message: "Provided information is incorrect.",
+                                        err: err
+                                    });
+                                })
                         });
                 })
                 .catch (err => {
@@ -129,6 +138,7 @@ exports.userLogin = (req, res, next) => {
             return bcrypt.compare(req.body.password, user.password)
         })
         .then( result => {
+            console.log(result);
             if (!result) {
                 return res.status(401).json({
                     title: "Login failed",

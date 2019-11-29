@@ -9,5 +9,6 @@ export interface UserData {
     zipCode: number, 
     gender: string, 
     dateOfBirth: Date,
-    email: string
+    email: string,
+    registerCode: string
 }

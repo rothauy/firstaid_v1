@@ -1,0 +1,8 @@
+{
+    "env": {
+        "ACCESS_TOKEN_SECRET": "firstaid_end_to_end_users_app",
+        "REFRESH_TOKEN_SECRET": "firstaid_end_to_end_users_app_refresh",
+        "PORT": "3000",
+        "REGISTERCODE": "v#&t8k"
+    }
+}

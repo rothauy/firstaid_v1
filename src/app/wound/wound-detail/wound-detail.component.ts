@@ -40,7 +40,7 @@ export class WoundDetailComponent implements OnInit, OnDestroy {
     this.authListenerSubs.unsubscribe();
   }
 
-  onEdit(id: string) {
+  onEdit() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;

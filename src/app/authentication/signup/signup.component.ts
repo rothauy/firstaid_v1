@@ -22,7 +22,6 @@ export class SignupComponent implements OnInit, OnDestroy {
   private mode = "create";
   private userId: string;
   private authId: string;
-  private email: string;
 
   private authStatusSub: Subscription;
 
@@ -83,7 +82,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         zipCode: this.data.userData.zipCode,
         dateOfBirth:  new Date (this.data.userData.dateOfBirth).toISOString().substr(0, 10),
         gender: this.data.userData.gender,
-        registerCode: "This will be something"
+        registerCode: this.data.userData.registerCode
       });
       this.form.controls.email.disable();
     } else {
@@ -102,12 +101,12 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
-    this.email = this.form.value.email;
-
+    const email = this.form.value.email;
+    console.log(email.toLowerCase());
     if (this.mode === "create") {
       this.authData = { 
         id: null,
-        email: this.email,
+        email: email.toLowerCase(),
         password: this.form.value.password,
         role: "user" };
       this.userData = {
@@ -121,7 +120,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         zipCode: this.form.value.zipCode,
         dateOfBirth: this.form.value.dateOfBirth,
         gender: this.form.value.gender,
-        email: this.email
+        email: email.toLowerCase(),
+        registerCode: this.form.value.registerCode
       }
       this.userService.createUser(this.authData, this.userData);
 
@@ -145,7 +145,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         zipCode: this.form.value.zipCode,
         dateOfBirth: this.form.value.dateOfBirth,
         gender: this.form.value.gender,
-        email: this.form.value.email
+        email: this.form.value.email,
+        registerCode: this.form.value.registerCode
       }
       this.userService.updateUser(this.authData, this.userData);
       setTimeout(() => {

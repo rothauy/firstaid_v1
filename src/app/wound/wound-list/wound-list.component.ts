@@ -19,7 +19,7 @@ export class WoundListComponent implements OnInit, OnDestroy {
   private woundsSub: Subscription;
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
-  private userRole: string;
+  userRole: string;
 
   constructor(
     private authService: AuthService,

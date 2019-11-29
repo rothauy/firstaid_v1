@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { WoundService } from '../wound/wound.service';
+import { Wound } from '../wound/wound.model';
 
 @Component({
   selector: 'app-result',
@@ -6,8 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./result.component.css']
 })
 export class ResultComponent implements OnInit {
+  wound: null;
 
-  constructor() { }
+  constructor(public woundService: WoundService) { }
 
   ngOnInit() {
   }
