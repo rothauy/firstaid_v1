@@ -36,3 +36,10 @@ Admin Test User: testuser1@gmail.com Test1234@
 TestUser: test12345@gmail.com   Test1234!
 
 Test
+
+PROD: 
+zRLfa2hwrFqO2Klg
+mongo "mongodb+srv://cluster0-nxq70.mongodb.net/test" --username FirstAid-NodeJs --password zRLfa2hwrFqO2Klg
+
+DEV: "mongodb+srv://firstaid:d9M3I1518EB4pvS0@cluster0-1hna2.mongodb.net/test"
+PROD: "mongodb+srv://FirstAid-NodeJs:zRLfa2hwrFqO2Klg@cluster0-nxq70.mongodb.net/test?retryWrites=true&w=majority"
