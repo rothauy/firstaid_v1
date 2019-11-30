@@ -9,7 +9,7 @@ exports.classifyWound = (req, res, next) => {
             // Create random dummpy output before Machine Learning Model is implemented
             const ran = Math.round(Math.random() * (result.length - 1));
             const saveResult = result[ran];
-            
+
             const userHistory = new UserHistory({
                 type: saveResult.type,
                 imagePath: url + "/images/" + req.file.filename,
