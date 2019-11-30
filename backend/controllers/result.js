@@ -20,7 +20,7 @@ exports.classifyWound = (req, res, next) => {
             const saveResult = result;
             const userHistory = new UserHistory({
                 type: result.type,
-                imagePath: url + "/images" + req.file.filename,
+                imagePath: url + "/images/" + req.file.filename,
                 creator: req.userData.userId
             });
             userHistory.save()

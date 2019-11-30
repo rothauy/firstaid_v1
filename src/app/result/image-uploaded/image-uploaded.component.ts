@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { mimeType } from 'src/app/shared/mime-type.validator';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ResultService } from '../result.service';
@@ -9,9 +9,8 @@ import { Wound } from 'src/app/wound/wound.model';
   templateUrl: './image-uploaded.component.html',
   styleUrls: ['./image-uploaded.component.css']
 })
-export class ImageUploadedComponent implements OnInit {
-  @Output() typeWasSelected = new EventEmitter<object>();
-  selectedType: string;
+export class ImageUploadedComponent implements OnInit, OnDestroy {
+  @Output() typeWasSelected = new EventEmitter<Wound>();
 
   form: FormGroup;
   imagePreview: string;
@@ -25,6 +24,10 @@ export class ImageUploadedComponent implements OnInit {
         asyncValidators: [mimeType]
       })
     });
+  }
+
+  ngOnDestroy() {
+
   }
 
   onImagePicked(event: Event) {
