@@ -3,6 +3,9 @@
         "ACCESS_TOKEN_SECRET": "firstaid_end_to_end_users_app",
         "REFRESH_TOKEN_SECRET": "firstaid_end_to_end_users_app_refresh",
         "PORT": "3000",
-        "REGISTERCODE": "v#&t8k"
+        "REGISTERCODE": "v#&t8k",
+        "MONGODBUSER": "firstaid",
+        "MONGODBPW": "d9M3I1518EB4pvS0",
+        "MONGODBSERVER": "cluster0-1hna2.mongodb.net/test"
     }
 }

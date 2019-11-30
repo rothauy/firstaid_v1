@@ -9,7 +9,7 @@ const resultRoutes = require('./routes/result')
 
 const app = express();
 
-mongoose.connect("mongodb+srv://firstaid:d9M3I1518EB4pvS0@cluster0-1hna2.mongodb.net/test")
+mongoose.connect("mongodb+srv://" + process.env.MONGODBUSER + ":" + process.env.MONGODBPW + "@" + process.env.MONGODBSERVER)
         .then(() => {
             console.log("Connected to Test DB in Cluster0 in firstaid-mean project!");
         })
