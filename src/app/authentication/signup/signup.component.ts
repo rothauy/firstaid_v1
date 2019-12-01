@@ -102,7 +102,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
     const email = this.form.value.email;
-    console.log(email.toLowerCase());
     if (this.mode === "create") {
       this.authData = { 
         id: null,

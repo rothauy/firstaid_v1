@@ -43,7 +43,6 @@ exports.createUser = (req, res, next) => {
                             });
                         })
                         .catch (err => {
-                            console.log(reqAuthData);
                             User.deleteOne({email: reqAuthData.email})
                                 .then( result => {
                                     res.status(500).json({
@@ -138,7 +137,6 @@ exports.userLogin = (req, res, next) => {
             return bcrypt.compare(req.body.password, user.password)
         })
         .then( result => {
-            console.log(result);
             if (!result) {
                 return res.status(401).json({
                     title: "Login failed",

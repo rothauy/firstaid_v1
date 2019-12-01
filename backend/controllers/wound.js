@@ -57,7 +57,6 @@ exports.editWound = (req, res, next) => {
 exports.deleteWound = (req, res, next) => {
     Wound.deleteOne({_id: req.params.id})
         .then( result => {
-            console.log(result);
             res.status(200).json({ 
                 message: "A type of wound was delete!"
             });
