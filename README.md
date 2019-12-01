@@ -26,20 +26,10 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-Mango DB Password: d9M3I1518EB4pvS0
-
-mongo "mongodb+srv://cluster0-1hna2.mongodb.net/test"  --username firstaid --password d9M3I1518EB4pvS0
-
 Register Code: v#&t8k
 
-Admin Test User: testuser1@gmail.com Test1234@
-TestUser: test12345@gmail.com   Test1234!
-
-Test
-
-PROD: 
-zRLfa2hwrFqO2Klg
-mongo "mongodb+srv://cluster0-nxq70.mongodb.net/test" --username FirstAid-NodeJs --password zRLfa2hwrFqO2Klg
+DEV:  mongo "mongodb+srv://cluster0-1hna2.mongodb.net/test"  --username firstaid --password d9M3I1518EB4pvS0
+PROD: mongo "mongodb+srv://cluster0-nxq70.mongodb.net/test" --username FirstAid-NodeJs --password zRLfa2hwrFqO2Klg
 
 DEV: "mongodb+srv://firstaid:d9M3I1518EB4pvS0@cluster0-1hna2.mongodb.net/test"
 PROD: "mongodb+srv://FirstAid-NodeJs:zRLfa2hwrFqO2Klg@cluster0-nxq70.mongodb.net/test?retryWrites=true&w=majority"
