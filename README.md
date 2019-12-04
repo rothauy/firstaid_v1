@@ -26,7 +26,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-Register Code: v#&t8k
+q
 
 DEV:  mongo "mongodb+srv://cluster0-1hna2.mongodb.net/test"  --username firstaid --password d9M3I1518EB4pvS0
 PROD: mongo "mongodb+srv://cluster0-nxq70.mongodb.net/test" --username FirstAid-NodeJs --password zRLfa2hwrFqO2Klg
