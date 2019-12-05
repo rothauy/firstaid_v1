@@ -41,6 +41,7 @@ import { LoginComponent } from './authentication/login/login.component';
     HttpClientModule,
     WoundModule,
     UserModule,
+    
   ],
   providers: [
     {

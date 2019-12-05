@@ -15,6 +15,7 @@ export class WoundCreateComponent implements OnInit {
 
   wound: Wound;
   isLoading = false;
+  breakpoint: number;
 
   form: FormGroup;
   private mode = "create";

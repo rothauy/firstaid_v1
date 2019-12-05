@@ -11,9 +11,10 @@ export class ResultService {
 
     constructor(private http: HttpClient) {}
 
-    getResult(image: File) {
+    getResult(image: File, ind: string) {
         const data = new FormData();
         data.append("image",image, "userResult");
+        data.append("ind", ind);
         return this.http.post<{wound: Wound}>(BACKEND_URL_RESULT, data);
     }
 }
