@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, FormGroup, FormGroupDirective} from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA, _countGroupLabelsBeforeOption } from '@angular/material';
@@ -7,6 +7,7 @@ import { UserData } from 'src/app/user/user.model';
 import { AuthData } from '../auth.model';
 import { UserService } from 'src/app/user/user.service';
 import { Subscription } from 'rxjs';
+import {ErrorStateMatcher} from '@angular/material';
 
 @Component({
   templateUrl: './signup.component.html',
@@ -18,6 +19,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   userData: UserData;
   authData: AuthData;
   today = new Date();
+  breakpoint: number;
 
   private mode = "create";
   private userId: string;
@@ -33,6 +35,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public router: Router) {}
 
   ngOnInit() {
+    this.breakpoint = (window.innerWidth <= 670) ? 1 : 2;
     this.authStatusSub = this.userService.getHistoryUpdateListener().subscribe(authStatus =>{
       this.isLoading = false;
     });
@@ -48,6 +51,8 @@ export class SignupComponent implements OnInit, OnDestroy {
           Validators.required, 
           Validators.minLength(8), 
           Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$!@#$%^&*?])[A-Za-z\d$!@#$%^&*?].{8,}')]}),
+      confirmPassword: new FormControl(null, {
+        validators: [Validators.required]}),
       phoneNumber: new FormControl(null, {
         validators: [Validators.required]}),
       address: new FormControl(null, {
@@ -64,7 +69,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         validators: [Validators.required]}),
       registerCode: new FormControl(null, {
         validators: [Validators.required]}),
-    });
+    }, {validators: [this.validatePasswords]});
+      
     if (this.data !== null){
       this.mode = "edit";
       this.userId = this.data.userData.id;
@@ -72,7 +78,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     
       this.form.setValue({
         email: this.data.authData.email,
-        password: this.data.authData.password,
+        password: '',
+        confirmPassword: '',
         firstName: this.data.userData.firstName,
         lastName: this.data.userData.lastName,
         phoneNumber: this.data.userData.phoneNumber,
@@ -102,8 +109,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
     const email = this.form.value.email;
-    console.log(email.toLowerCase());
     if (this.mode === "create") {
+      this.form.get('password').value;
       this.authData = { 
         id: null,
         email: email.toLowerCase(),
@@ -126,8 +133,10 @@ export class SignupComponent implements OnInit, OnDestroy {
       this.userService.createUser(this.authData, this.userData);
 
     } else {
-      if (this.form.value.password === this.data.authData.password) {
+      if (!this.form.value.password) {
         this.form.value.password = null;
+      } else {
+        this.form.value.password = this.data.authData.password;
       }
       this.authData = { 
         id: this.authId,
@@ -161,9 +170,34 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   }
 
-  onClose() {
-    this.dialogRef.close();
+  validatePasswords(group: FormGroup) {
+    const password = group.get('password').value;
+    const confirmPassword = group.get('confirmPassword').value;
+    return password === confirmPassword ? null : { notMatch: true };
   }
 
+  passwordErrorMatcher = {
+    isErrorState: (control: FormControl | null, form: FormGroupDirective | null): boolean => {
+      const ctrlInvalid = control.touched && control.invalid;
+      const pwInvalid = control.touched && this.form.get('confirmPassword').touched && this.form.invalid;
+      return ctrlInvalid || pwInvalid;
+    }
+  }
 
+  confirmPasswordErrorMatcher = {
+    isErrorState: (control: FormControl | null, form: FormGroupDirective | null): boolean => {
+      const ctrlInvalid = control.touched && control.invalid;
+      const pwInvalid = control.touched && this.form.get('password').touched && this.form.invalid;
+      return ctrlInvalid || pwInvalid;
+    }
+  }
+
+  onResize(event) {
+    this.breakpoint = (event.target.innerWidth <= 670) ? 1 : 2;
+  }
+
+  onClose() {
+    this.dialogRef.close();
+    this.router.navigate(['/profileUpdated']);
+  }
 }

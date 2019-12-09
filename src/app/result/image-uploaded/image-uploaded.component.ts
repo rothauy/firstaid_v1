@@ -1,17 +1,21 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { mimeType } from 'src/app/shared/mime-type.validator';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ResultService } from '../result.service';
-import { Wound } from 'src/app/wound/wound.model';
+import * as tf from "@tensorflow/tfjs";
 
-@Component({
-  selector: 'app-image-uploaded',
-  templateUrl: './image-uploaded.component.html',
-  styleUrls: ['./image-uploaded.component.css']
+@Component({selector: 'app-image-uploaded',
+templateUrl: './image-uploaded.component.html',
+styleUrls: ['./image-uploaded.component.css']
+  
 })
-export class ImageUploadedComponent implements OnInit, OnDestroy {
-  @Output() typeWasSelected = new EventEmitter<Wound>();
+export class ImageUploadedComponent implements OnInit {
+  @Output() typeWasSelected = new EventEmitter<object>();
 
+  isLoading = false;
+  model: tf.LayersModel;
+  predictions: any;
+  
   form: FormGroup;
   imagePreview: string;
 
@@ -24,28 +28,55 @@ export class ImageUploadedComponent implements OnInit, OnDestroy {
         asyncValidators: [mimeType]
       })
     });
+    this.initModel();
   }
 
-  ngOnDestroy() {
+  async initModel() {
+    this.isLoading = true;
+    this.model = await tf.loadLayersModel('http://localhost:3000/tfjs_files/model.json');
+    console.log(this.model);
+    this.isLoading = false;
+  }
 
+  async predictModel(image) {
+    let tensor = tf.browser.fromPixels(image).resizeNearestNeighbor([150,150]).toFloat().expandDims();
+    const output = this.model.predict(tensor) as any;
+    let max = 0;
+    this.predictions = Array.from(output.dataSync())
+      .map(function (p, i) {
+        return {
+          probability: p as number,
+          className: i
+        };
+      }).sort(function (a, b) {
+        return b.probability - a.probability;
+      });
+    
+    console.log(this.predictions[0].className);
   }
 
   onImagePicked(event: Event) {
+    this.isLoading = true;
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({ image: file });
     this.form.get("image").updateValueAndValidity();
     const reader = new FileReader();
+    reader.readAsDataURL(file);
     reader.onload = () => {
       this.imagePreview = reader.result as string;
+      const image = new Image();
+      image.src = this.imagePreview;
+      image.onload = () =>{
+        this.predictModel(image);
+      };
     };
-    reader.readAsDataURL(file);
+    this.isLoading = false;
   }
 
   onSubmit() {
-    this.resultService.getResult(this.form.value.image).subscribe(result => {
+    this.resultService.getResult(this.form.value.image, this.predictions[0].className).subscribe(result => {
       this.typeWasSelected.emit(result.wound);
     });
   }
-
 
 }
