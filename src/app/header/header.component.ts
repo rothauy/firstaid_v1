@@ -32,6 +32,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onSignUp() {
     const dialogConfig = new MatDialogConfig();
+    const setHeight = Math.round(window.outerHeight * .8);
+    if (setHeight > 600) {
+      dialogConfig.maxHeight = "600px";
+    } else {
+      dialogConfig.maxHeight = setHeight.toString() + "px";
+    }
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "60%";
