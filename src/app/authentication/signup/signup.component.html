@@ -6,7 +6,7 @@
     </mat-toolbar>
     <mat-spinner *ngIf="isLoading" style="margin-top: 10px;"></mat-spinner>
     <form [formGroup]="form" (submit)="onSignUp()" *ngIf="!isLoading">
-        <mat-grid-list cols="2" rowHeight="425px">
+        <mat-grid-list [cols]="breakpoint" rowHeight="425px" (window:resize)="onResize($event)">
             <mat-grid-tile>
                 <div>
                     <mat-form-field>
@@ -22,8 +22,12 @@
                         <mat-error *ngIf="form.get('email').invalid">*Required field. Please input a valid email</mat-error>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput type="password" formControlName="password" placeholder="Password">
+                        <input matInput type="password" formControlName="password" placeholder="Password" [errorStateMatcher]="passwordErrorMatcher">
                         <mat-error *ngIf="form.get('password').invalid">*Required field. 1 Uppercase, 1 Lowercase, 1 Number and 1 Special Chacters with 8 minimum character.</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                            <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm Password" [errorStateMatcher]="confirmPasswordErrorMatcher">
+                            <mat-error *ngIf="form.hasError('notMatch')">*Required field. Password is not matched.</mat-error>
                     </mat-form-field>
                     <mat-form-field>
                         <input matInput type="date" formControlName="dateOfBirth" placeholder="Date of Birth">
@@ -38,17 +42,17 @@
                             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
                         <mat-error *ngIf="form.get('phoneNumber').invalid">*Required field</mat-error>
                     </mat-form-field>
-                    <mat-form-field>
-                        <mat-select formControlName="gender" placeholder="Gender">
-                          <mat-option value="1">Male</mat-option>
-                          <mat-option value="2">Female</mat-option>
-                          <mat-option value="3">Other</mat-option>
-                        </mat-select>
-                      </mat-form-field>
                 </div>
             </mat-grid-tile>
             <mat-grid-tile>
                 <div>
+                    <mat-form-field>
+                        <mat-select formControlName="gender" placeholder="Gender">
+                            <mat-option value="1">Male</mat-option>
+                            <mat-option value="2">Female</mat-option>
+                            <mat-option value="3">Other</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                     <mat-form-field>
                         <input matInput type="text" formControlName="address" placeholder="Address">
                         <mat-error *ngIf="form.get('address').invalid">*Required field</mat-error>
@@ -74,7 +78,7 @@
                         <button mat-raised-button class="variable-space" type="reset" color="warn">Clear</button>
                     </div>
                 </div>
-            </mat-grid-tile>
+            </mat-grid-tile> 
         </mat-grid-list>
     </form>
 </mat-card>

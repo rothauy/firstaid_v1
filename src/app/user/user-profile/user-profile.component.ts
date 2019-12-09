@@ -17,10 +17,12 @@ export class UserProfileComponent implements OnInit {
   form: FormGroup;
   userProfile: UserData;
   userAuth: AuthData;
+  breakpoint: boolean;
 
   constructor(private authService: AuthService, private dialog: MatDialog) { }
 
   ngOnInit() {
+    this.breakpoint = false;
     this.isLoading = true;
     this.authService.getUserProfile()
     .subscribe( response => {
@@ -71,6 +73,12 @@ export class UserProfileComponent implements OnInit {
 
   onEdit() {
     const dialogConfig = new MatDialogConfig();
+    const setHeight = Math.round(window.outerHeight * .8);
+    if (setHeight > 600) {
+      dialogConfig.maxHeight = "600px";
+    } else {
+      dialogConfig.maxHeight = setHeight.toString() + "px";
+    }
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "60%";
