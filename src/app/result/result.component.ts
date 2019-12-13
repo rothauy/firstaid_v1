@@ -8,7 +8,7 @@ import { Wound } from '../wound/wound.model';
   styleUrls: ['./result.component.css']
 })
 export class ResultComponent implements OnInit {
-  wound: null;
+  wound: Wound;
 
   constructor(public woundService: WoundService) { }
 

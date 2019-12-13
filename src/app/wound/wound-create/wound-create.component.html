@@ -6,7 +6,7 @@
     </mat-toolbar>
     <mat-spinner *ngIf="isLoading" style="margin-top: 10px;"></mat-spinner>
     <form [formGroup]="form" (submit)="onSaveWound()" *ngIf="!isLoading">
-        <mat-grid-list cols="2" rowHeight="300px">
+        <mat-grid-list [cols]="breakpoint" [rowHeight]="matFormHeight" (window:resize)="onResize($event)">
             <mat-grid-tile>
                 <div>
                     <mat-form-field>   

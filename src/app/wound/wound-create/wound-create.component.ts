@@ -15,6 +15,8 @@ export class WoundCreateComponent implements OnInit {
 
   wound: Wound;
   isLoading = false;
+  breakpoint: number;
+  matFormHeight: string;
 
   form: FormGroup;
   private mode = "create";
@@ -27,6 +29,13 @@ export class WoundCreateComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Wound) {}
 
   ngOnInit() {
+    this.breakpoint = (window.innerWidth <= 940) ? 1 : 2;
+    if (this.breakpoint === 1) {
+      this.matFormHeight = "220px";
+    } else {
+      this.matFormHeight = "300px";
+    };
+    
     this.form = new FormGroup({
       type: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)]
@@ -92,4 +101,12 @@ export class WoundCreateComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  onResize(event) {
+    this.breakpoint = (event.target.innerWidth <= 940) ? 1 : 2;
+    if (this.breakpoint === 1) {
+      this.matFormHeight = "220px";
+    } else {
+      this.matFormHeight = "300px";
+    }
+  }
 }

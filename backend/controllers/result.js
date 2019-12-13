@@ -1,15 +1,13 @@
 const UserHistory = require('../models/userHistory');
 const Wound = require('../models/wound');
+const Jimp = require('jimp');
 
 exports.classifyWound = (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
-
     Wound.find()
         .then(result => {
-            // Create random dummpy output before Machine Learning Model is implemented
-            const ran = Math.round(Math.random() * (result.length - 1));
-            const saveResult = result[ran];
-
+            const saveResult = result[req.body.ind];
+            
             const userHistory = new UserHistory({
                 type: saveResult.type,
                 imagePath: url + "/images/" + req.file.filename,
