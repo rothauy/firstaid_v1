@@ -4,6 +4,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ResultService } from '../result.service';
 import * as tf from "@tensorflow/tfjs";
 
+import { environment } from '../../../environments/environment';
+
+const BACKEND_URL = environment.apiURL;
+
 @Component({selector: 'app-image-uploaded',
 templateUrl: './image-uploaded.component.html',
 styleUrls: ['./image-uploaded.component.css']
@@ -33,8 +37,9 @@ export class ImageUploadedComponent implements OnInit {
 
   async initModel() {
     this.isLoading = true;
-    this.model = await tf.loadLayersModel('http://localhost:3000/tfjs_files/model.json');
-    console.log(this.model);
+    console.log("here");
+    this.model = await tf.loadLayersModel(BACKEND_URL + 'tfjs_files/model.json');
+    console.log("here");
     this.isLoading = false;
   }
 

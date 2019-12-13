@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment"
 import { Wound } from '../wound/wound.model';
 
-const BACKEND_URL_RESULT = environment.apiURL + "/result/";
+const BACKEND_URL_RESULT = environment.apiURL + "api/result/";
 
 @Injectable({providedIn: 'root'})
 export class ResultService {

@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
-const BACKEND_URL = environment.apiURL + "/wounds/";
+const BACKEND_URL = environment.apiURL + "api/wounds/";
 
 @Injectable({providedIn: 'root'})
 export class WoundService {

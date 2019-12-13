@@ -8,7 +8,7 @@ import  *  as CryptoJS from 'crypto-js';
 
 import { environment } from '../../environments/environment';
 
-const BACKEND_URL = environment.apiURL + "/user/";
+const BACKEND_URL = environment.apiURL + "api/user/";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {

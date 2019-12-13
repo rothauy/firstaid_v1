@@ -10,8 +10,8 @@ import { AuthService } from '../authentication/auth.service';
 
 import { environment } from '../../environments/environment';
 
-const BACKEND_URL_USER = environment.apiURL + "/user/";
-const BACKEND_URL_RESULT = environment.apiURL + "/result/";
+const BACKEND_URL_USER = environment.apiURL + "api/user/";
+const BACKEND_URL_RESULT = environment.apiURL + "api/result/";
 
 @Injectable({ providedIn: "root" })
 export class UserService {
