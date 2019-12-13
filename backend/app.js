@@ -20,7 +20,7 @@ mongoose.connect("mongodb+srv://" + process.env.MONGODBUSER + ":" + process.env.
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.join(__dirname, "backend/images")));
 app.use("/", express.static(path.join(__dirname, "angular")));
 
 app.use((req, res, next) => {
@@ -35,6 +35,8 @@ app.use((req, res, next) => {
     );
     next();
 });
+
+app.use("/tfjs_files", express.static(path.join(__dirname, "tfjs_files")));
 
 app.use("/api/user", userRoutes);
 app.use("/api/wounds", woundsRoutes);

@@ -1,6 +1,5 @@
 const UserHistory = require('../models/userHistory');
 const Wound = require('../models/wound');
-const Jimp = require('jimp');
 
 exports.classifyWound = (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
