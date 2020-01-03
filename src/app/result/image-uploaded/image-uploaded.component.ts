@@ -37,9 +37,7 @@ export class ImageUploadedComponent implements OnInit {
 
   async initModel() {
     this.isLoading = true;
-    console.log("here");
     this.model = await tf.loadLayersModel(BACKEND_URL + 'tfjs_files/model.json');
-    console.log("here");
     this.isLoading = false;
   }
 
