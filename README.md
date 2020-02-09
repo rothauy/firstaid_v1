@@ -18,6 +18,12 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Other information
 
+Test Login:
+
+Admin: TestUser1@gmail.com Password: Test1234!
+
+User: TestUser2@gmail.com Password: Test1234!
+
 Register Code: v#&t8k
 
 DEV:  mongo "mongodb+srv://cluster0-1hna2.mongodb.net/test"  --username firstaid --password d9M3I1518EB4pvS0
