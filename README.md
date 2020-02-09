@@ -18,6 +18,8 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Other information
 
+AWS LINK: http://firstaidnodeangular-env.fddx9qwi8y.us-east-2.elasticbeanstalk.com/
+
 Test Login:
 
 Admin: TestUser1@gmail.com Password: Test1234!
