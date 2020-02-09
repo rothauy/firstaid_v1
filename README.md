@@ -21,7 +21,9 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 Register Code: v#&t8k
 
 DEV:  mongo "mongodb+srv://cluster0-1hna2.mongodb.net/test"  --username firstaid --password d9M3I1518EB4pvS0
+
 PROD: mongo "mongodb+srv://cluster0-nxq70.mongodb.net/test" --username FirstAid-NodeJs --password zRLfa2hwrFqO2Klg
 
 DEV: "mongodb+srv://firstaid:d9M3I1518EB4pvS0@cluster0-1hna2.mongodb.net/test"
+
 PROD: "mongodb+srv://FirstAid-NodeJs:zRLfa2hwrFqO2Klg@cluster0-nxq70.mongodb.net/test?retryWrites=true&w=majority"
