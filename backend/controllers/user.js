@@ -4,6 +4,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const UserData = require('../models/userData');
 
+/**
+ * Attempts to create new user
+ * @param {*} req.body.authData The request object, which contains authentication information
+ * @param {*} req.body.userData The request object, which contains user's information
+ */
 exports.createUser = (req, res, next) => {
     let reqAuthData = req.body.authData;
     let reqUserData = req.body.userData;
@@ -13,6 +18,7 @@ exports.createUser = (req, res, next) => {
             message: "Provided register code is incorrect.",
         });
     }
+    //encrypted user's password for enhancing the security of user's identify
     bcrypt.hash(reqAuthData.password, 10)
         .then( hash => {
             const user = new User ({
@@ -63,6 +69,11 @@ exports.createUser = (req, res, next) => {
         });
 }
 
+/**
+ * Attempts to edit existing user's information
+ * @param {*} req.body.authData The request object, which contains authentication information
+ * @param {*} req.body.userData The request object, which contains user's information
+ */
 exports.editUser = (req, res, next) => {
     let reqAuthData = req.body.authData;
     let reqUserData = req.body.userData;
@@ -123,6 +134,12 @@ exports.editUser = (req, res, next) => {
     };
 }
 
+/**
+ * Attempts to fetch and comparing to give access to user
+ * @param {*} req.body.email
+ * @param {*} req.body.password
+ * @returns {*} JWT for user access session
+ */
 exports.userLogin = (req, res, next) => {
     let fetchedUser;
     User.findOne({ email: req.body.email })
@@ -143,6 +160,7 @@ exports.userLogin = (req, res, next) => {
                     message: "Incorrect email or password."
                 })
             }
+            //Providing token session for user
             const token = jwt.sign(
                 { email: fetchedUser.email, userId: fetchedUser._id, role: fetchedUser.role },
                 process.env.ACCESS_TOKEN_SECRET,
@@ -162,6 +180,11 @@ exports.userLogin = (req, res, next) => {
         });
 }
 
+/**
+ * Attempts to find user's profile
+ * @param {*} req.body The request object, which is a JWT token contains user's credential
+ * @returns {*} userProfile information
+ */
 exports.userProfile = (req, res, next) => {
     const payload = jwt.verify(req.body, process.env.ACCESS_TOKEN_SECRET);
     UserData.findOne({ email: payload.email })

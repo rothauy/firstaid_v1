@@ -1,5 +1,11 @@
 const Wound = require('../models/wound');
 
+/**
+ * Attempts to create new wound
+ * @param {*} req.body.type
+ * @param {*} req.body.description
+ * @param {*} req.body.imagePath
+ */
 exports.createWound = (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
     const wound = new Wound({
@@ -27,6 +33,12 @@ exports.createWound = (req, res, next) => {
         });
 }
 
+/**
+ * Attempts to edit existing wound
+ * @param {*} req.body.type
+ * @param {*} req.body.description
+ * @param {*} req.body.imagePath
+ */
 exports.editWound = (req, res, next) => {
     let imagePath = req.body.imagePath;
     if (req.file) {
@@ -54,6 +66,10 @@ exports.editWound = (req, res, next) => {
         });
 }
 
+/**
+ * Attempts to delete
+ * @param {*} req.params.id The request object, which is the ID of the wound in MongoDB
+ */
 exports.deleteWound = (req, res, next) => {
     Wound.deleteOne({_id: req.params.id})
         .then( result => {
@@ -69,6 +85,10 @@ exports.deleteWound = (req, res, next) => {
         });
 }
 
+/**
+ * Attempts to find a specific wound
+ * @param {*} req.params.id The request object, which is the ID of the wound in MongoDB
+ */
 exports.fetchWound = (req, res, next) => {
     Wound.findById(req.params.id)
         .then(wound => {
@@ -86,6 +106,9 @@ exports.fetchWound = (req, res, next) => {
         });
 }
 
+/**
+ * Attempts to find all the wounds
+ */
 exports.fetchWounds = (req, res, next) => {
     Wound.find()
         .then( documents => {

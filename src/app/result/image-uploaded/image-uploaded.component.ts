@@ -54,8 +54,6 @@ export class ImageUploadedComponent implements OnInit {
       }).sort(function (a, b) {
         return b.probability - a.probability;
       });
-    
-    console.log(this.predictions[0].className);
   }
 
   onImagePicked(event: Event) {

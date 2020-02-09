@@ -1,3 +1,7 @@
+/**
+ * Attempts to verify that user has an admin access
+ * @param {*} req.userData.role
+ */
 module.exports = (req, res, next) => {
     try {
         if (req.userData.role === "admin") {
