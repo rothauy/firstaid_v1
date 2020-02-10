@@ -2,3 +2,26 @@
     font-size: 10px;
     color: black;
 }
+
+/* pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-break: keep-all;
+    word-wrap: break-word;
+ } */
+
+ pre {
+    white-space: pre-wrap;
+    word-break: keep-all;
+    border: 2px solid #FFF !important;
+    background-color: #FFF;
+  }
+
+  p {
+      font-size: medium;
+      font-style: normal;
+      font-family: Arial;
+  }

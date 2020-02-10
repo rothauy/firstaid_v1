@@ -9,6 +9,7 @@ Run `npm install` to re-install all the missing packages
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
 Run `npm run start:server` for a dev NodeJS server. Nagvigate to `http://localhost:3000/` to browse different API
 
 ## Build

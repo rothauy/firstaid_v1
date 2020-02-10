@@ -1,0 +1,12 @@
+pre {
+    white-space: pre-wrap;
+    word-break: keep-all;
+    border: 2px solid #FFF !important;
+    background-color: #FFF;
+}
+
+p {
+    font-size: medium;
+    font-style: normal;
+    font-family: Arial;
+}

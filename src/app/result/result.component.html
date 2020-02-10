@@ -6,8 +6,9 @@
 <div class="row" *ngIf="wound">
     <div class="col-md-12">
         <h1>This wound is classifid as {{ wound.type }}</h1>
-        <p>Please follow the procedure below on how to treat your wound.</p>
-        <p>{{ wound.description }}</p>
+        <div class="text">
+            <pre><p>{{ wound.description }}</p></pre>
+        </div>
     </div>
 </div>
 <hr>
