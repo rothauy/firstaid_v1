@@ -1,6 +1,10 @@
 # Firstaid
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
+Firstaid is an end-to-end user application, which can classified user's wound--different type of burns and cuts--using a trained machine learning model, then it would output on how the user should treat their wound. 
+
+It is built on a MEAN stack with rounded authentication, and authorization; routing; and error handling from frontend to backend.
+
+For more inforamtion on the machine learning model, please follow this link, https://github.com/rothauy/firstaid_model.
 
 ## Requirement
 
