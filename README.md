@@ -25,6 +25,26 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 User will need to sign up with the code 'v#&t8k' to access the application. Once, the user signs up, the account will has a user status, which mean that they can only submit the picture under Result tab. They have no privilege of adding new wound or edit existing wound. 
 
+#### Login
+
+User will need to login to access the application functionality and to keep their previous scan history. 
+
+#### Result Tab
+
+It only shows when the user login. Within the tab, there is a function that requires user to input a picture of their wound for the model to classify, then it will tell the user what type of wound they have and how to take care of that. It also keeps track of previous submission. 
+
+#### Home/Classification
+
+This page showcases all the type of wounds that the model can classify and other information. 
+
+#### Manage
+
+This page contains all user information. User can also edit their existing information, excluding email (PK). 
+
+#### Logout
+
+This is a logout function that it clears user's token session.
+
 ## Other information
 
 AWS LINK: http://firstaidnodeangular-env.fddx9qwi8y.us-east-2.elasticbeanstalk.com/
