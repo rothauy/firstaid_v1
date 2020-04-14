@@ -20,6 +20,11 @@ Run `npm run start:server` for a dev NodeJS server. Nagvigate to `http://localho
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
+## Runbook
+####Signup
+
+User will need to sign up with the code 'v#&t8k' to access the application. Once, the user signs up, the account will has a user status, which mean that they can only submit the picture under Result tab. They have no privilege of adding new wound or edit existing wound. 
+
 ## Other information
 
 AWS LINK: http://firstaidnodeangular-env.fddx9qwi8y.us-east-2.elasticbeanstalk.com/
