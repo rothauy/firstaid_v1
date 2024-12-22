@@ -44,23 +44,3 @@ This page contains all user information. User can also edit their existing infor
 #### Logout
 
 This is a logout function that it clears user's token session.
-
-## Other information
-
-AWS LINK: http://firstaidnodeangular-env.fddx9qwi8y.us-east-2.elasticbeanstalk.com/
-
-Test Login:
-
-Admin: TestUser1@gmail.com Password: Test1234!
-
-User: TestUser2@gmail.com Password: Test1234!
-
-Register Code: v#&t8k
-
-DEV:  mongo "mongodb+srv://cluster0-1hna2.mongodb.net/test"  --username firstaid --password d9M3I1518EB4pvS0
-
-PROD: mongo "mongodb+srv://cluster0-nxq70.mongodb.net/test" --username FirstAid-NodeJs --password zRLfa2hwrFqO2Klg
-
-DEV: "mongodb+srv://firstaid:d9M3I1518EB4pvS0@cluster0-1hna2.mongodb.net/test"
-
-PROD: "mongodb+srv://FirstAid-NodeJs:zRLfa2hwrFqO2Klg@cluster0-nxq70.mongodb.net/test?retryWrites=true&w=majority"
